@@ -248,3 +248,56 @@ a:focus-visible, button:focus-visible, .sidebar a:focus-visible { outline:2px so
 .focus-hint b { color: var(--accent-bright, #2bd996); font-weight: 700; }
 .focus-hint button { flex: none; font-size: 12px; font-weight: 700; color: var(--ink, #17191e); background: #fff; border: 0; border-radius: 8px; padding: 6px 12px; cursor: pointer; }
 @media (max-width: 860px){ .focus-hint { display: none; } }
+
+/* ============================================================================
+   Scrollbars — thin, rounded, inset. Overlay-style (fade in on hover) inside
+   the nav panes; always-on but quiet everywhere else.
+   ============================================================================ */
+@supports (scrollbar-width: thin) {
+  * { scrollbar-width: thin; scrollbar-color: var(--line-2) transparent; }
+}
+
+::-webkit-scrollbar { width: 11px; height: 11px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-corner { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: var(--line-2);
+  border: 3.5px solid transparent;      /* padding: shrinks the thumb to ~4px */
+  background-clip: content-box;
+  border-radius: 999px;
+  transition: background-color .18s var(--ease); }
+::-webkit-scrollbar-thumb:hover { background: #b6bac0; background-clip: content-box; }
+::-webkit-scrollbar-thumb:active { background: var(--muted); background-clip: content-box; }
+
+/* --- sidebar / toc / focus-mode panels: thumb only while pointing at them --- */
+.sidebar, .shell.focus .sidebar, .shell.focus .toc { scrollbar-color: transparent transparent; }
+.sidebar:hover, .sidebar:focus-within,
+.shell.focus .sidebar:hover, .shell.focus .sidebar:focus-within,
+.shell.focus .toc:hover, .shell.focus .toc:focus-within { scrollbar-color: var(--line-2) transparent; }
+
+.sidebar::-webkit-scrollbar-thumb,
+.shell.focus .sidebar::-webkit-scrollbar-thumb,
+.shell.focus .toc::-webkit-scrollbar-thumb { background: transparent; background-clip: content-box; }
+.sidebar:hover::-webkit-scrollbar-thumb, .sidebar:focus-within::-webkit-scrollbar-thumb,
+.shell.focus .sidebar:hover::-webkit-scrollbar-thumb,
+.shell.focus .toc:hover::-webkit-scrollbar-thumb { background: var(--line-2); background-clip: content-box; }
+.sidebar:hover::-webkit-scrollbar-thumb:hover,
+.shell.focus .sidebar:hover::-webkit-scrollbar-thumb:hover,
+.shell.focus .toc:hover::-webkit-scrollbar-thumb:hover { background: #b6bac0; background-clip: content-box; }
+
+/* reserve the gutter so nothing reflows when the thumb appears */
+.sidebar { scrollbar-gutter: stable; padding-right: 6px; overscroll-behavior: contain;
+  /* soften the hard cut at both ends of the scroll area */
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 20px, #000 calc(100% - 28px), transparent 100%);
+          mask-image: linear-gradient(to bottom, transparent 0, #000 20px, #000 calc(100% - 28px), transparent 100%); }
+/* in focus mode the sidebar is a floating card — no fade mask, it would eat the border */
+.shell.focus .sidebar { -webkit-mask-image: none; mask-image: none; }
+.shell.focus .sidebar, .shell.focus .toc { scrollbar-gutter: stable; overscroll-behavior: contain; }
+
+/* --- dark surfaces: code blocks need a light thumb --- */
+.prose pre::-webkit-scrollbar { height: 10px; }
+.prose pre::-webkit-scrollbar-thumb { background: #3a3e45; background-clip: content-box; }
+.prose pre::-webkit-scrollbar-thumb:hover { background: #545a63; background-clip: content-box; }
+.prose pre { scrollbar-color: #3a3e45 transparent; }
+
+@media (prefers-reduced-motion: reduce) { ::-webkit-scrollbar-thumb { transition: none; } }
