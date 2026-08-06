@@ -1,0 +1,80 @@
+---
+title: Back-in-stock alerts
+description: Telling the shoppers who wanted a sold-out variant that it is available again.
+updated: 2026-08-05
+---
+
+import Callout from '../../../components/Callout.astro';
+
+**Fires when:** a variant a subscriber looked at while sold out is available again.
+
+This is the automation shoppers actively want. Nobody resents a back-in-stock
+alert, because they asked for the product.
+
+## How it works
+
+While a subscriber browses, the embed records which products and variants they
+viewed and whether each was in stock. Shopify tells Qpushly whenever a product
+changes; when a previously out-of-stock variant has inventory again, the shoppers
+who saw it sold out get the alert.
+
+<Callout type="note" title="It is per variant">
+If someone looked at a jacket in medium while medium was gone, restocking large
+does not alert them. That is correct behaviour — a size they cannot wear is not
+news — but it does mean a restock of one size notifies fewer people than you might
+expect.
+</Callout>
+
+## Set it up
+
+**Automations → Back in Stock.**
+
+One reminder, short delay. There is no reason to wait: the restock is the news, and
+popular sizes go again quickly.
+
+> **Title:** Back in stock: Kiln Mug, Slate
+> **Message:** The size you were looking at is available again.
+> **Button:** Shop it → the product URL
+
+## Get more people into it
+
+The single highest-leverage change here is adding a subscribe invite to your
+sold-out product pages. A shopper staring at a greyed-out size is the most
+motivated subscriber you will ever get.
+
+Add `data-qpushly-subscribe` to a button on your product template, shown when the
+selected variant is unavailable:
+
+```html
+<button type="button" data-qpushly-subscribe>
+  Notify me when it's back
+</button>
+```
+
+See [Turn on the theme app embed](/docs/getting-started/theme-embed) for the full
+explanation.
+
+<Callout type="tip" title="This is the one change worth making today">
+Stores that put a subscribe button on sold-out variants collect subscribers with
+genuine purchase intent, and those subscribers then convert on the alert. It is
+the cleanest loop in the product.
+</Callout>
+
+## Things to know
+
+- **It needs the products permission.** Granted at install; the automation cannot
+  fire without it.
+- **Restocks are detected from Shopify's product notifications**, so there is a
+  short lag — typically a minute or two, then up to ten more for the sweep.
+- **Editing a product does not trigger it.** Only a genuine out-of-stock to
+  in-stock transition on a variant someone viewed.
+- **One alert per restock**, not one per product edit.
+
+## If it never fires
+
+1. Confirm the shopper actually viewed the product **while it was sold out** —
+   viewing it in stock does not enrol them.
+2. Confirm they are a subscriber.
+3. Confirm inventory actually crossed from zero to non-zero. Going from 2 to 20 is
+   not a restock.
+4. Check the reminder's status is active.

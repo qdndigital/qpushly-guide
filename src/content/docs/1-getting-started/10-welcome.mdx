@@ -1,0 +1,85 @@
+---
+title: Welcome to Qpushly
+description: What web push is, what Qpushly does with it, and what it can't do — read this first.
+updated: 2026-08-05
+---
+
+import Callout from '../../../components/Callout.astro';
+
+Qpushly adds **web push notifications** to your Shopify store. A visitor taps
+"Allow" once in their browser, and from then on you can send them a notification
+that appears on their desktop or phone — even when they are not on your site.
+
+No email address. No phone number. Nothing for the shopper to type.
+
+## What you can send
+
+**Campaigns** — a message you write and send yourself, now or on a schedule. A
+new drop, a sale, a restock announcement.
+
+**Automations** — messages that fire on their own when something happens in your
+store. There are five:
+
+| Automation | Sends when |
+| --- | --- |
+| Welcome notifications | someone subscribes |
+| Abandoned cart recovery | a cart sits untouched for ten minutes |
+| Browse abandonment | a product was viewed but not bought |
+| Back in stock | a variant someone looked at is available again |
+| Price drop | a product falls below the price a shopper saw |
+
+Each automation can send up to **three** messages in sequence, on delays you set.
+
+## What web push is not
+
+<Callout type="warning" title="Push is not email">
+A push notification is a short interruption on someone's screen. It has a title,
+two lines of text, an image and up to two buttons — that is the whole format.
+There is no inbox for it to sit in, no way for the shopper to scroll back and
+find it later, and no way to send a long message. Treat every send as something
+that has to earn the interruption.
+</Callout>
+
+Two more limits worth knowing before you plan anything around push:
+
+- **A subscriber is a browser, not a person.** If someone subscribes on their
+  laptop and again on their phone, that is two subscribers. If they clear their
+  browser data, the subscription is gone and they will need to opt in again.
+- **You cannot email a push subscriber.** Qpushly only knows the address their
+  browser gave it. Email addresses appear in your subscriber list only where your
+  own Shopify order data supplies one.
+
+## Where it runs
+
+Qpushly is an **embedded Shopify app** — it lives inside your Shopify admin, in
+the sidebar with everything else. There is no separate dashboard to log into and
+no separate account to manage.
+
+The storefront half of it is a **theme app embed**, which you switch on from the
+theme editor. That step is not optional, and it is where most setups stall — so
+it has [its own page](/docs/getting-started/theme-embed).
+
+## Which browsers can receive notifications
+
+| Platform | Support |
+| --- | --- |
+| Chrome, Edge, Firefox, Opera — desktop | Yes |
+| Chrome, Firefox, Samsung Internet — Android | Yes |
+| Safari — macOS | Yes |
+| Safari — iPhone / iPad | Only if the shopper adds your store to their home screen |
+
+<Callout type="note">
+Apple requires an installed web app before it will deliver web push on iOS. Most
+of your iPhone traffic will therefore never see the prompt. This is a platform
+rule, not a Qpushly limitation — every web push tool has it. Your
+[subscriber list](/docs/subscribers/subscriber-list) shows the real device mix
+for your store, which is more useful than any general statistic.
+</Callout>
+
+## Where to go next
+
+1. **[Install Qpushly](/docs/getting-started/install)** — from the App Store.
+2. **[Turn on the theme app embed](/docs/getting-started/theme-embed)** — the step
+   that actually makes it work.
+3. **[Quickstart](/docs/getting-started/quickstart)** — first subscriber and first
+   send, in about ten minutes.

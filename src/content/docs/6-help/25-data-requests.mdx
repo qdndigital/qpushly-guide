@@ -1,0 +1,84 @@
+---
+title: Answering a data request
+description: What to do when a shopper asks for the data you hold about them — and where Qpushly puts it for you.
+updated: 2026-08-05
+---
+
+import Callout from '../../../components/Callout.astro';
+
+Under GDPR and similar laws, a shopper can ask you for a copy of the personal data
+you hold about them. If they submit that request through your store, Shopify
+forwards it to every app you have installed.
+
+**Qpushly assembles everything it holds for that person automatically.** You
+download it and send it on.
+
+<Callout type="warning" title="The deadline is yours">
+The 30-day clock to answer the shopper belongs to you as the store owner, not to
+us. Qpushly's job is to make sure you are not missing data you did not know you
+had.
+</Callout>
+
+## Where to find it
+
+**Apps → Qpushly → Data requests.**
+
+Each row shows when the request arrived, which email or phone number it was for,
+and how many records were found in each category. Click **Download JSON** to get
+the file.
+
+If a row says **No data held**, that shopper never subscribed to notifications from
+your store and Qpushly has nothing about them. That is still a useful answer to
+give — it is what "we hold no data" looks like.
+
+## What is in the file
+
+| Section | Contents |
+| --- | --- |
+| `identifiers` | The email and/or phone the request was made for |
+| `subscribers` | Name, email, phone, browser, OS, device, city, country, language, timezone, when they subscribed |
+| `abandonedCarts` | Cart contents and value for carts linked to them |
+| `orders` | Orders Qpushly attributed to a notification |
+| `trackedProducts` | Products and variants they viewed, and the price at the time |
+| `counts` | A summary you can read at a glance |
+
+<Callout type="note" title="One thing is deliberately left out">
+The file does **not** contain the shopper's push endpoint or its encryption keys.
+Those are not information *about* the person — they are the credentials that let a
+notification be sent to that browser. Anyone holding them could message the
+shopper, so exporting them would create a risk rather than satisfy a right. If a
+shopper specifically asks about them, you can say their browser holds a
+notification subscription for your store which they can revoke at any time from
+their browser settings.
+</Callout>
+
+## Sending it to the shopper
+
+The JSON is complete but not friendly. What most merchants do:
+
+1. Open the file and read the `counts`.
+2. Write a short plain-language summary — "we hold your email address, your
+   browser and device type, and a record of 3 products you viewed".
+3. Attach the JSON as the full record.
+
+Send it to the address the request came from, not to any other address on file.
+
+## If they also want it deleted
+
+That is a different request. A shopper asking for deletion should submit a deletion
+request through your store; Shopify forwards it and Qpushly removes their
+subscriber record, cart history and attributed orders automatically.
+
+<Callout type="tip">
+Deleting their record is not the same as unsubscribing them. If their browser
+permission is still granted and they visit your store again, a new subscription is
+created. To stop receiving notifications entirely they need to block notifications
+for your site in their browser — see
+[Privacy and data](/docs/help/privacy-and-data).
+</Callout>
+
+## Records are kept with your shop
+
+Stored requests live with your shop's data, which means they are removed when you
+uninstall Qpushly and Shopify sends the shop-deletion request. If you need to keep
+a compliance trail longer than that, download the files and store them yourself.

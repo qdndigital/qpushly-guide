@@ -1,0 +1,41 @@
+---
+import '../styles/global.css';
+import { theme, logo, site } from '../config';
+const { title, description } = Astro.props as { title?: string; description?: string };
+const t = theme();
+const pageTitle = title ?? `${t.brand} ${site.guideLabel}`;
+// Every accent-derived value the stylesheets need, emitted as CSS vars on <html>
+// so the whole guide reskins from src/config.ts alone. `--accent-rgb` exists so
+// rgba() glows can be tinted without a colour-mix() polyfill.
+const vars =
+  `--accent:${t.accent};--accent-ink:${t.accentInk};--accent-soft:${t.accentSoft};` +
+  `--accent-line:${t.accentLine};--accent-rgb:${t.accentRgb};`;
+---
+<!doctype html>
+<html lang="en" style={vars}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preload" href="/fonts/inter-vf-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/jetbrainsmono-vf-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <title>{pageTitle}</title>
+    {description && <meta name="description" content={description} />}
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta name="theme-color" content="#ffffff" />
+  </head>
+  <body>
+    <header class="site">
+      <div class="wrap bar">
+        <a href="/" class="brand" aria-label={`${t.brand} ${site.guideLabel} home`}>
+          <Fragment set:html={logo(28)} />
+          <span>{t.brand}</span><span class="tag">{site.guideLabel}</span>
+        </a>
+        <nav class="hlinks">
+          <a href="/docs">Guide</a>
+          <a href={site.homeUrl}>{new URL(site.homeUrl).hostname} ↗</a>
+        </nav>
+      </div>
+    </header>
+    <slot />
+  </body>
+</html>

@@ -1,0 +1,130 @@
+---
+title: FAQ
+description: Short answers to the questions merchants ask most, with links to the longer version.
+updated: 2026-08-05
+---
+
+import Callout from '../../../components/Callout.astro';
+
+## Setup
+
+**I installed the app and nothing happens.**
+You still need to enable the theme app embed. This is the single most common issue —
+[here is how](/docs/getting-started/theme-embed).
+
+**Why does Qpushly show its own invite instead of the browser's prompt?**
+Because a browser only lets you ask once, ever, and a shopper who blocks
+notifications can never be asked again. Asking with our own invite first means the
+browser prompt is only spent on people who already said yes — and Safari refuses a
+prompt that did not come from a click anyway. You can turn the invite off and ask
+only from your own button. [Settings](/docs/getting-started/theme-embed).
+
+**Do I need a developer?**
+No. Installing and enabling the embed are both point-and-click. The only optional code
+is a one-line attribute if you want a "Notify me" button in a specific place.
+
+**Will it slow my storefront down?**
+The embed adds three small deferred scripts. They do not block rendering, and there are
+no third-party fonts, images or trackers.
+
+**Can I use it alongside another push app?**
+You should not. Two push apps on one storefront produce duplicate notifications and
+untrustworthy numbers in both. Remove the old one —
+[details](/docs/subscribers/import-export).
+
+## Subscribers
+
+**Do shoppers give an email address?**
+No. That is the point of push. Email addresses appear on a subscriber only where your
+own Shopify order data supplies one.
+
+**Why is my subscriber count higher than my customer count?**
+A subscriber is a browser, not a person — laptop plus phone is two. See
+[The subscriber list](/docs/subscribers/subscriber-list).
+
+**Can I see who unsubscribed?**
+No, and no push tool can. When a shopper blocks notifications, their browser does not
+tell your store. Those subscribers stay in your list but stop being deliverable.
+
+**Can I import my email list?**
+No. A push subscription can only be created by the shopper's own browser. Email
+contacts have to opt in from your storefront.
+
+**Can I import from another push provider?**
+Yes, via CSV — but expect some endpoints to be dead already.
+[How](/docs/subscribers/import-export).
+
+## Sending
+
+**Why did my scheduled campaign go out a few minutes late?**
+Scheduled work runs on a sweep every ten minutes. Schedule fifteen minutes early if the
+exact moment matters. [More](/docs/campaigns/schedule-and-audience).
+
+**How often should I send?**
+Two to four campaigns a month for most stores, plus whatever the automations send. Push
+is more intrusive than email and the penalty for over-sending is permanent — a blocked
+shopper cannot be won back from inside the app.
+
+**Can I set quiet hours?**
+There is no quiet-hours setting. Control it by choosing when you schedule, and check
+your subscribers' timezone spread in the subscriber list.
+
+**How many reminders can an automation have?**
+Three. The limit is deliberate.
+[Why](/docs/automations/automations-overview).
+
+**Can I segment by purchase history or spend?**
+No. Segmentation is by browser, OS and device — attributes of the subscription, not the
+customer.
+
+## Numbers
+
+**Does "impressions" mean shoppers saw it?**
+No — delivered to the browser. Clicks are your only real engagement signal.
+
+**Why is attributed revenue lower than I expect?**
+Every gap in attribution pushes the number down: the click tag expires after about 30
+minutes, lives on one device, and can be dropped by a theme that rebuilds the cart.
+Treat it as a floor. [Full explanation](/docs/campaigns/campaign-results).
+
+**Qpushly and my email tool both claim the same order.**
+Both are right by their own model. Do not add them together.
+
+## Devices
+
+**Does it work on iPhone?**
+Only if the shopper has added your store to their home screen — Apple's rule, not ours.
+Most iPhone traffic will never see the prompt.
+
+**Which browsers work?**
+Chrome, Edge, Firefox, Opera and Samsung Internet on desktop and Android; Safari on
+macOS. [Details](/docs/getting-started/welcome).
+
+## Billing
+
+**How am I charged?**
+Through Shopify, on your normal Shopify invoice. Qpushly never handles a card.
+[More](/docs/settings/plan-and-billing).
+
+**Can I cancel myself?**
+Yes, from Shopify's plan page. No need to contact support.
+
+**What happens to my data if I uninstall?**
+Credentials go immediately; everything else is deleted when Shopify sends the
+shop-redaction request.
+
+**A shopper asked me for their data — what do I do?**
+Open **Apps → Qpushly → Data requests**, download the JSON and send it on. Qpushly
+assembles it for you when Shopify forwards the request.
+[Walkthrough](/docs/help/data-requests).
+
+<Callout type="danger" title="Export first">
+Your subscriber list cannot be recovered after uninstalling. Download the CSV before
+you go — [how](/docs/subscribers/import-export).
+</Callout>
+
+## Something else
+
+Work through [Troubleshooting](/docs/help/troubleshooting) first — it is ordered by how
+often each cause turns out to be the real one. If you still need us, include your
+`myshopify.com` domain and whether the theme embed is enabled on your live theme.

@@ -1,0 +1,104 @@
+---
+import Base from '../layouts/Base.astro';
+import { loadDocs, groupDocs } from '../lib/docs';
+import { sectionIcon, docIcon } from '../lib/icons';
+import { site } from '../config';
+
+const infos = await loadDocs();
+const groups = groupDocs(infos);
+const first = infos[0];
+const total = infos.length;
+---
+<Base>
+  <section class="lhero-wrap">
+    <div class="lhero wrap">
+      <div class="spec"><span class="dot"></span>DOCUMENTATION</div>
+      <h1>How can we <span class="it">help</span>?</h1>
+      <p>{site.tagline}</p>
+      <div class="hcta">
+        {first && <a class="cta" href={first.url}>Start reading <span>→</span></a>}
+        <a class="cta ghost" href={first ? first.url : '/'}>{total} guides · {groups.length} topics</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap lsections">
+    {groups.map((g) => (
+      <section class="lsec">
+        <header class="lsec-h">
+          <span class="lsec-ic" set:html={sectionIcon(g.slug, 22)} />
+          <div class="lsec-ht">
+            <h2>{g.label}</h2>
+            <span class="lsec-n">{g.items.length} {g.items.length === 1 ? 'guide' : 'guides'}</span>
+          </div>
+        </header>
+        <div class="lsec-grid">
+          {g.items.map((i) => {
+            const fileSlug = i.slugParam.split('/').pop() || '';
+            return (
+              <a class="acard" href={i.url}>
+                <span class="thumb" set:html={docIcon(fileSlug, g.slug, 26)} />
+                <span class="acard-b">
+                  <span class="at">{i.entry.data.title}</span>
+                  {i.entry.data.description && <span class="ad">{i.entry.data.description}</span>}
+                </span>
+                <span class="acard-arrow" aria-hidden="true">→</span>
+              </a>
+            );
+          })}
+        </div>
+      </section>
+    ))}
+  </section>
+</Base>
+
+<style>
+  /* hero — mint aurora + faint dotted grid */
+  .lhero-wrap { position:relative; overflow:hidden; }
+  .lhero-wrap::before { content:""; position:absolute; inset-inline:0; top:0; height:520px; z-index:-2; pointer-events:none;
+    background:
+      radial-gradient(48% 46% at 78% -6%, rgba(var(--accent-rgb),.13), transparent 70%),
+      radial-gradient(40% 42% at 6% 4%, rgba(var(--accent-rgb),.07), transparent 72%); }
+  .lhero-wrap::after { content:""; position:absolute; inset-inline:0; top:0; height:440px; z-index:-2; opacity:.5; pointer-events:none;
+    background-image:radial-gradient(rgba(16,24,40,.06) 1px, transparent 1px); background-size:22px 22px;
+    -webkit-mask-image:linear-gradient(180deg,#000 0%,transparent 86%); mask-image:linear-gradient(180deg,#000 0%,transparent 86%); }
+
+  .lhero { padding:74px 20px 44px; max-width:760px; }
+  .lhero .spec { display:inline-flex; align-items:center; gap:8px; font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.16em; color:var(--accent-ink);
+    background:rgba(255,255,255,.7); border:1px solid var(--accent-line); border-radius:999px; padding:6px 12px; backdrop-filter:blur(6px); }
+  .lhero .spec .dot { width:6px; height:6px; border-radius:50%; background:var(--accent); }
+  .lhero h1 { font-size:clamp(34px,6vw,56px); font-weight:800; letter-spacing:-.045em; line-height:1.02; margin:22px 0 0; }
+  .lhero h1 .it { font-family:'Instrument Serif',serif; font-style:italic; font-weight:400; color:var(--accent-ink); }
+  .lhero p { font-size:18px; line-height:1.6; color:var(--ink-2); margin:18px 0 0; max-width:52ch; }
+  .hcta { display:flex; align-items:center; gap:12px; margin-top:28px; flex-wrap:wrap; }
+  .cta { display:inline-flex; align-items:center; gap:8px; font-weight:600; font-size:15px; background:var(--ink); color:#fff; padding:12px 20px; border-radius:999px; transition:all .2s var(--ease);
+    box-shadow:0 1px 2px rgba(16,24,40,.18),0 8px 20px -10px rgba(16,24,40,.4); }
+  .cta:hover { transform:translateY(-1px); box-shadow:0 2px 4px rgba(16,24,40,.2),0 14px 28px -12px rgba(16,24,40,.5); }
+  .cta span { transition:transform .2s var(--ease); }
+  .cta:hover span { transform:translateX(3px); }
+  .cta.ghost { background:transparent; color:var(--ink-2); border:1px solid var(--line); box-shadow:none; font-family:'JetBrains Mono',monospace; font-size:12.5px; letter-spacing:.02em; }
+  .cta.ghost:hover { color:var(--accent-ink); border-color:var(--accent-line); background:var(--accent-soft); transform:none; }
+
+  /* topic sections */
+  .lsections { display:flex; flex-direction:column; gap:46px; padding:6px 20px 96px; }
+  .lsec-h { display:flex; align-items:center; gap:14px; margin-bottom:18px; }
+  .lsec-ic { display:grid; place-items:center; width:46px; height:46px; border-radius:13px; color:var(--accent-ink);
+    background:linear-gradient(150deg, var(--accent-soft), #fff); border:1px solid var(--accent-line); box-shadow:inset 0 1px 0 rgba(255,255,255,.7); }
+  .lsec-ht { display:flex; flex-direction:column; gap:1px; }
+  .lsec-ht h2 { font-size:22px; font-weight:800; letter-spacing:-.03em; line-height:1.1; }
+  .lsec-n { font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); }
+
+  .lsec-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(330px,1fr)); gap:14px; }
+  .acard { position:relative; display:flex; align-items:center; gap:15px; padding:15px 16px; background:var(--surface); border:1px solid var(--line); border-radius:15px; transition:all .18s var(--ease); }
+  .acard:hover { border-color:var(--accent-line); box-shadow:var(--shadow-float); transform:translateY(-2px); }
+  .thumb { flex:none; display:grid; place-items:center; width:52px; height:52px; border-radius:13px; color:var(--accent-ink);
+    background:linear-gradient(140deg, var(--accent-soft), #fff); border:1px solid var(--accent-line); transition:all .2s var(--ease); }
+  .acard:hover .thumb { color:#fff; background:linear-gradient(140deg, var(--accent), var(--accent-ink)); border-color:transparent; box-shadow:0 8px 18px -8px rgba(var(--accent-rgb),.55); }
+  .acard-b { display:flex; flex-direction:column; gap:3px; min-width:0; }
+  .at { font-weight:650; font-size:15px; letter-spacing:-.01em; color:var(--ink); }
+  .ad { font-size:13px; color:var(--muted); line-height:1.45; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+  .acard-arrow { margin-left:auto; align-self:center; color:var(--muted); opacity:0; transform:translateX(-5px); transition:all .18s var(--ease); }
+  .acard:hover .acard-arrow { opacity:1; transform:translateX(0); color:var(--accent-ink); }
+
+  @media (max-width:560px){ .lsec-grid{ grid-template-columns:1fr; } }
+</style>

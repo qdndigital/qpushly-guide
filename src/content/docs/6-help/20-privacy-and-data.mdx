@@ -1,0 +1,89 @@
+---
+title: Privacy and data
+description: What Qpushly stores, what it deliberately does not, and how deletion and customer requests work.
+updated: 2026-08-05
+---
+
+import Callout from '../../../components/Callout.astro';
+
+You are the controller of your shoppers' data; Qpushly processes it for you. This page
+is the plain-language version of what that means in practice, so you can answer a
+shopper's question without guessing.
+
+## What is stored about a shopper
+
+Only for shoppers who **explicitly allowed notifications**. Visitors who decline, or
+never see the prompt, are not recorded.
+
+| Category | Fields |
+| --- | --- |
+| Push subscription | The endpoint URL from their browser, plus the two keys needed to encrypt a message to it |
+| Device and locale | Browser, OS, device type, user agent, language, timezone |
+| Contact details | Email, phone, city, country — **only** where your own Shopify order data supplies them |
+| Cart activity | Cart contents, value, currency (for abandoned-cart reminders) |
+| Product activity | Products and variants viewed, whether in stock, and the price at the time |
+| Send activity | Which notifications were delivered, clicked and converted |
+| Attributed orders | For orders traced to a notification: id, total, currency, customer email and first name, and each line item's title, quantity, price and product/variant id. Orders we cannot attribute are not recorded. |
+
+## What is deliberately not done
+
+- **No third-party geolocation, IP lookup or fingerprinting.** An earlier version of
+  the storefront script called an external geolocation service; that was removed.
+- **No selling or sharing** with advertisers or data brokers.
+- **No cross-store use.** Every record is scoped to the store it belongs to.
+- **No third-party fonts, scripts or images** loaded onto your storefront.
+- **No tracking of visitors who have not subscribed.**
+
+## What a shopper can do
+
+**Stop receiving notifications** — block notifications for your site in their browser
+settings. This is immediate and permanent and does not depend on you or on us. It is
+the only method that fully stops delivery.
+
+**Ask you to delete their record** — you can remove them from your subscriber list.
+
+<Callout type="note" title="Deleting a record is not the same as unsubscribing">
+If their browser permission is still granted and they visit your store again, the
+embed re-creates a subscription. Someone who wants to stop hearing from you needs to
+block notifications in the browser. Say that when a shopper asks.
+</Callout>
+
+## Deletion
+
+**On uninstall** — your store's access credentials are removed immediately.
+
+**On shop redaction** — Shopify sends this after an uninstall. Every record for your
+store is deleted: subscribers, campaigns, automations, notification logs, tracked
+products, carts, attributed orders, settings.
+
+**On customer redaction** — when Shopify forwards a customer's deletion request,
+Qpushly deletes that person's subscriber record, cart history and attributed order rows,
+matched on the email and phone Shopify supplies.
+
+**On customer data request** — when Shopify forwards a customer's access request,
+Qpushly assembles everything it holds for that person and puts it under
+**Apps → Qpushly → Data requests** for you to download and send on. Walkthrough:
+[Answering a data request](/docs/help/data-requests). You are the one who answers
+the shopper; the 30-day clock is yours.
+
+<Callout type="danger" title="Export before you uninstall">
+Shop redaction is complete and irreversible. Download your subscriber CSV first —
+see [Import and export](/docs/subscribers/import-export).
+</Callout>
+
+## What you should have on your own store
+
+Two things, both your responsibility rather than ours:
+
+1. **Your store's privacy policy should mention push notifications** — that you collect
+   browser push subscriptions and device information, and what you use them for.
+2. **Do not promise more than the format allows.** If you tell shoppers they can
+   unsubscribe from a link in the notification, that is not how web push works; the
+   control is in their browser.
+
+## Where notifications travel
+
+Delivery goes through the push service run by the shopper's own browser vendor —
+Google, Mozilla or Apple. That hop is part of the Web Push standard and cannot be
+avoided by any tool. The message body is encrypted so only the shopper's browser can
+read it; the vendor routes it without seeing the content.

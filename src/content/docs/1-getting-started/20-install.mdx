@@ -1,0 +1,60 @@
+---
+title: Install Qpushly
+description: Install from the Shopify App Store, and what the permissions it asks for are actually used for.
+updated: 2026-08-05
+---
+
+import Callout from '../../../components/Callout.astro';
+
+## Install
+
+1. Open the Qpushly listing on the **Shopify App Store**.
+2. Click **Add app**, then choose the store you want to install it on.
+3. Review the permissions (see below) and click **Install**.
+4. Shopify drops you into Qpushly's **Dashboard**.
+
+That is it — no API keys, no scripts to paste, no account to create. Qpushly
+appears in your Shopify admin sidebar under **Apps**.
+
+## What the permissions are for
+
+Shopify shows you a list of what the app can access. Qpushly asks for four
+things, and only four:
+
+| Permission | Why it is needed |
+| --- | --- |
+| **View products** | To receive Shopify's product-update notifications, which is what triggers back-in-stock and price-drop alerts. Without it those two automations can never fire. |
+| **View orders** | To match an order back to the notification that was clicked, so campaigns and automations can show orders and revenue. |
+| **View and manage files** | To store the images you upload for campaigns and your notification logo in your own Shopify Files. |
+
+<Callout type="note" title="What it does not ask for">
+Qpushly does not ask to *edit* your products, orders or inventory, and does not
+ask for customer records. If a future version needs more, Shopify will ask you to
+approve the change — an app cannot quietly widen its own access.
+</Callout>
+
+## The next step is not optional
+
+Installing the app gives you the admin screens. It does **not** put anything on
+your storefront yet, which means no visitor can subscribe and every screen in the
+app will be empty.
+
+<Callout type="danger" title="Do this next">
+Go to **[Turn on the theme app embed](/docs/getting-started/theme-embed)**. Until
+you do, Qpushly cannot collect a single subscriber. This is the number one reason
+a new install looks broken.
+</Callout>
+
+## If the install fails
+
+**"This app can't be installed"** — your store may be on a plan that blocks
+custom or embedded apps, or a store owner permission is missing. Ask whoever owns
+the store to install it, or to grant you the **Manage and install apps**
+permission under Settings → Users.
+
+**You installed it but cannot find it** — Shopify admin → **Apps** → Qpushly.
+Pin it there and it will stay in your sidebar.
+
+**A blank screen after install** — reload the page once. If it persists, open the
+app in a normal browser window rather than a private/incognito one; embedded apps
+need cookies from `admin.shopify.com`.

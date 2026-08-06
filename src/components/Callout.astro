@@ -1,0 +1,19 @@
+---
+/** <Callout type="note|tip|warning|danger" title="...">…</Callout> */
+const { type = 'note', title } = Astro.props as { type?: 'note'|'tip'|'warning'|'danger'; title?: string | false };
+const defaults: Record<string, string> = { note: 'Note', tip: 'Tip', warning: 'Warning', danger: 'Careful' };
+const paths: Record<string, string> = {
+  note: 'M12 8h.01M11 12h1v4h1',
+  tip: 'M9 18h6M10 21h4M12 3a6 6 0 0 0-3.6 10.8c.5.4.6.9.6 1.2v.5h6v-.5c0-.3.1-.8.6-1.2A6 6 0 0 0 12 3z',
+  warning: 'M12 9v4M12 17h.01M10.3 4.3 2.6 18a1.8 1.8 0 0 0 1.6 2.7h15.6A1.8 1.8 0 0 0 21.4 18L13.7 4.3a1.9 1.9 0 0 0-3.4 0z',
+  danger: 'M12 8v5M12 16h.01M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18z',
+};
+const heading = title === false ? null : (title ?? defaults[type]);
+---
+<aside class={`callout ${type}`}>
+  <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={paths[type]} /></svg>
+  <div class="bd">
+    {heading && <div class="ct">{heading}</div>}
+    <slot />
+  </div>
+</aside>

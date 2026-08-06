@@ -1,0 +1,88 @@
+---
+title: Import and export
+description: Bringing a push list over from another provider, exporting yours, and why an imported endpoint may not work.
+updated: 2026-08-05
+---
+
+import Callout from '../../../components/Callout.astro';
+
+## Export
+
+**Subscribers → Export CSV**, or **Import subscribers → Export CSV**.
+
+You get a dated file (`qpushly-subscribers-YYYY-MM-DD.csv`) with your full list.
+
+Worth doing before you uninstall, before a migration, and periodically as a backup —
+your list is one of the few things in the app you cannot rebuild.
+
+## Import
+
+**Qpushly → Import subscribers.** Drop in a `.csv` exported from your previous push
+provider, or a file you built yourself.
+
+<Callout type="note" title="Importing needs the paid plan">
+Exporting is available on every plan — you must always be able to get your own list
+out. Importing a list *in* is a paid feature; the page tells you so before you pick
+a file. See [Plan and billing](/docs/settings/plan-and-billing).
+</Callout>
+
+After the import you get four counts and, if any rows failed, the reasons:
+
+| Count | Meaning |
+| --- | --- |
+| **Imported** | New subscribers created |
+| **Updated** | Existing subscribers matched and refreshed |
+| **Failed** | Rows that could not be used |
+| **Total** | Rows read |
+
+Skipped rows are listed with a reason, so a failed import is diagnosable rather than
+mysterious.
+
+## What an import can and cannot do
+
+<Callout type="warning" title="An imported endpoint may already be dead">
+A push subscription is issued by the shopper's browser to a specific site and signed
+with a specific key. When you import endpoints from another provider, some will
+still be deliverable and some will not — the shopper may have cleared their data,
+changed browser, or revoked permission since.
+
+There is no way to test an endpoint without sending to it, so expect your usable
+list to be smaller than the row count. This is inherent to web push, not something
+any tool can fix.
+</Callout>
+
+Two more things to know:
+
+- **You cannot import an email list as push subscribers.** There is no way to
+  manufacture a push endpoint from an email address. Those shoppers have to opt in
+  from your storefront.
+- **Importing does not trigger welcome notifications.** Imported subscribers are not
+  new opt-ins, so the welcome automation does not fire for them. That is deliberate —
+  a welcome message to someone who subscribed a year ago on another platform is
+  confusing.
+
+## Migrating from another provider
+
+1. **Export from the old provider** before you cancel — some remove your data
+   immediately on cancellation.
+2. **Install Qpushly and enable the theme embed** so new subscribers start arriving.
+3. **Import the old list.** Read the skipped-row reasons.
+4. **Run both for a short overlap** if the old provider allows it, so you can
+   compare delivery.
+5. **Send one campaign to the imported list** and compare its impressions against
+   the number of rows imported. That difference is your real attrition.
+6. **Turn off the old provider's storefront script.** Two push tools on one
+   storefront means two service workers competing, which produces exactly the sort of
+   intermittent bug that takes days to find.
+
+<Callout type="danger" title="Do not leave two push apps installed">
+If the previous provider's script is still on your theme, shoppers can end up
+subscribed twice and receiving duplicate notifications — and neither app's numbers
+will be trustworthy. Remove it before you launch Qpushly properly.
+</Callout>
+
+## CSV format
+
+Export a file from Qpushly first and use it as the template — matching its columns
+is the reliable way to get an import accepted. The push endpoint and its two keys
+are the fields that actually matter; everything else is metadata.

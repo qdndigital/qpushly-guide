@@ -1,0 +1,180 @@
+---
+import type { MarkdownHeading } from 'astro';
+import Base from './Base.astro';
+import Sidebar from '../components/Sidebar.astro';
+import Toc from '../components/Toc.astro';
+import { loadDocs, groupDocs, type DocInfo } from '../lib/docs';
+import { theme, site } from '../config';
+
+const { info, headings } = Astro.props as { info: DocInfo; headings: MarkdownHeading[] };
+const infos = await loadDocs();
+const groups = groupDocs(infos);
+
+const idx = infos.findIndex((d) => d.slugParam === info.slugParam);
+const prev = idx > 0 ? infos[idx - 1] : null;
+const next = idx < infos.length - 1 ? infos[idx + 1] : null;
+
+const { title, description, updated } = info.entry.data;
+const fmt = updated ? new Intl.DateTimeFormat('en', { dateStyle: 'medium' }).format(updated) : null;
+---
+<Base title={`${title} · ${theme().brand} ${site.guideLabel}`} description={description}>
+  <div class="shell">
+    <Sidebar groups={groups} current={info.url} />
+    <article class="article">
+      <button class="focus-btn" id="focusBtn" type="button" aria-label="Toggle focus mode">
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8V4h4M16 8V4h-4M4 12v4h4M16 12v4h-4"/></svg>
+        <span id="focusLbl">Focus</span>
+      </button>
+      <div class="crumb">{info.sectionLabel}</div>
+      <h1>{title}</h1>
+      {description && <p class="lead">{description}</p>}
+      {fmt && <div class="meta">Last updated · {fmt}</div>}
+      <div class="prose"><slot /></div>
+      {(prev || next) && (
+        <nav class="pager">
+          {prev ? <a href={prev.url}><div class="k">← Previous</div><div class="v">{prev.entry.data.title}</div></a> : <span></span>}
+          {next ? <a href={next.url} class="nx"><div class="k">Next →</div><div class="v">{next.entry.data.title}</div></a> : <span></span>}
+        </nav>
+      )}
+    </article>
+    <Toc headings={headings} />
+  </div>
+
+  <!-- focus-mode edge affordances (siblings of .shell) -->
+  <div class="edge-zone l" id="zoneL" aria-hidden="true"></div>
+  <div class="edge-zone r" id="zoneR" aria-hidden="true"></div>
+  <button class="edge l" id="edgeL" type="button" aria-label="Show navigation menu"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5l-5 5 5 5"/></svg><span class="lbl">Menu</span></button>
+  <button class="edge r" id="edgeR" type="button" aria-label="Show on-this-page contents"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 5l5 5-5 5"/></svg><span class="lbl">On this page</span></button>
+
+  <!-- first-visit hint -->
+  <div class="focus-hint" id="focusHint">
+    <span>Menus are tucked away for bigger images — <b>hover the edges</b> to peek them, or <b>Focus</b> to pin. Click any image to zoom.</span>
+    <button id="focusHintOk" type="button">Got it</button>
+  </div>
+
+  <!-- image lightbox -->
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true">
+    <img id="lbImg" alt="" />
+    <button class="lb-close" id="lbClose" type="button" aria-label="Close">✕</button>
+    <div class="lb-hint">click image to return · scroll to zoom · drag to pan</div>
+  </div>
+
+  <script>
+    // ---- Focus mode: tuck the menus for big images; hover the edges to peek them back ----
+    (() => {
+      const shell = document.querySelector('.shell');
+      if (!shell) return;
+      const btn = document.getElementById('focusBtn');
+      const lbl = document.getElementById('focusLbl');
+      const KEY = 'ugs_doc_focus'; // 'off' = user pinned menus visible
+      const setFocus = (on, save) => {
+        shell.classList.toggle('focus', on);
+        if (lbl) lbl.textContent = on ? 'Show menus' : 'Focus';
+        if (save) try { localStorage.setItem(KEY, on ? 'on' : 'off'); } catch {}
+      };
+      let saved; try { saved = localStorage.getItem(KEY); } catch {}
+      setFocus(saved !== 'off', false); // default ON
+      btn && btn.addEventListener('click', () => setFocus(!shell.classList.contains('focus'), true));
+
+      let t;
+      const peek = (cls, on) => {
+        clearTimeout(t);
+        if (on) shell.classList.add(cls);
+        else t = setTimeout(() => shell.classList.remove('nav-peek', 'toc-peek'), 380);
+      };
+      const bind = (ids, cls) => ids.forEach((id) => {
+        const el = typeof id === 'string' ? document.getElementById(id) : id;
+        if (!el) return;
+        el.addEventListener('mouseenter', () => peek(cls, true));
+        el.addEventListener('mouseleave', () => peek(cls, false));
+      });
+      bind(['zoneL', 'edgeL', shell.querySelector('.sidebar')], 'nav-peek');
+      bind(['zoneR', 'edgeR', shell.querySelector('.toc')], 'toc-peek');
+      ['edgeL', 'edgeR'].forEach((id) => document.getElementById(id)?.addEventListener('click', () => setFocus(false, true)));
+
+      // first-visit visual cue: pulse the handles + a one-time hint toast
+      const hint = document.getElementById('focusHint');
+      let seen; try { seen = localStorage.getItem('ugs_doc_hint'); } catch {}
+      if (!seen && shell.classList.contains('focus') && hint) {
+        const edges = Array.from(document.querySelectorAll('.edge'));
+        edges.forEach((e) => e.classList.add('hint'));
+        const showT = setTimeout(() => hint.classList.add('show'), 650);
+        const dismiss = () => {
+          clearTimeout(showT); hint.classList.remove('show');
+          edges.forEach((e) => e.classList.remove('hint'));
+          try { localStorage.setItem('ugs_doc_hint', '1'); } catch {}
+        };
+        document.getElementById('focusHintOk')?.addEventListener('click', dismiss);
+        setTimeout(dismiss, 9000);
+        ['zoneL', 'zoneR', 'edgeL', 'edgeR'].forEach((id) => document.getElementById(id)?.addEventListener('mouseenter', dismiss, { once: true }));
+      }
+    })();
+
+    // ---- Image lightbox: click to zoom from source, scroll to zoom, drag to pan ----
+    (() => {
+      const lb = document.getElementById('lightbox');
+      const img = document.getElementById('lbImg');
+      if (!lb || !img) return;
+      let scale = 1, tx = 0, ty = 0, from = null, drag = false, moved = false, sx = 0, sy = 0;
+      const apply = () => { img.style.transform = `translate(${tx}px,${ty}px) scale(${scale})`; };
+      const open = (el) => {
+        from = el.getBoundingClientRect();
+        img.src = el.currentSrc || el.src; scale = 1; tx = 0; ty = 0;
+        lb.classList.add('open'); document.body.style.overflow = 'hidden';
+        img.style.transition = 'none';
+        requestAnimationFrame(() => {
+          const r = img.getBoundingClientRect();
+          const dx = (from.left + from.width / 2) - (r.left + r.width / 2);
+          const dy = (from.top + from.height / 2) - (r.top + r.height / 2);
+          const s = from.width / r.width;
+          img.style.transform = `translate(${dx}px,${dy}px) scale(${s})`;
+          requestAnimationFrame(() => { img.style.transition = 'transform .38s cubic-bezier(.22,.61,.21,1)'; img.style.transform = 'translate(0,0) scale(1)'; });
+        });
+      };
+      const close = () => {
+        scale = 1; tx = 0; ty = 0; img.style.transform = 'translate(0,0) scale(1)';
+        const r = img.getBoundingClientRect();
+        if (from) {
+          const dx = (from.left + from.width / 2) - (r.left + r.width / 2);
+          const dy = (from.top + from.height / 2) - (r.top + r.height / 2);
+          const s = from.width / r.width;
+          img.style.transition = 'transform .3s cubic-bezier(.4,0,.2,1)';
+          requestAnimationFrame(() => { img.style.transform = `translate(${dx}px,${dy}px) scale(${s})`; });
+        }
+        lb.classList.remove('open'); document.body.style.overflow = '';
+        setTimeout(() => { img.style.transition = 'none'; img.style.transform = 'translate(0,0) scale(1)'; }, 320);
+      };
+      document.querySelectorAll('.prose img').forEach((el) => el.addEventListener('click', () => open(el)));
+      lb.addEventListener('click', (e) => { if (e.target === lb) close(); });
+      document.getElementById('lbClose')?.addEventListener('click', close);
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && lb.classList.contains('open')) close(); });
+      lb.addEventListener('wheel', (e) => {
+        if (!lb.classList.contains('open')) return; e.preventDefault();
+        scale = Math.min(5, Math.max(1, scale - e.deltaY * 0.0016));
+        if (scale === 1) { tx = 0; ty = 0; }
+        img.style.transition = 'transform .12s ease'; apply();
+      }, { passive: false });
+      img.addEventListener('mousedown', (e) => { moved = false; if (scale <= 1) return; e.preventDefault(); drag = true; sx = e.clientX - tx; sy = e.clientY - ty; img.classList.add('grabbing'); img.style.transition = 'none'; });
+      window.addEventListener('mousemove', (e) => { if (!drag) return; moved = true; tx = e.clientX - sx; ty = e.clientY - sy; apply(); });
+      window.addEventListener('mouseup', () => { drag = false; img.classList.remove('grabbing'); });
+      img.addEventListener('click', () => { if (!moved) close(); });   // click the image again to return
+    })();
+  </script>
+
+  <script>
+    const links = Array.from(document.querySelectorAll('.toc a[data-toc]'));
+    if (links.length) {
+      const map = new Map(links.map((a) => [a.getAttribute('data-toc'), a]));
+      const heads = links.map((a) => document.getElementById(a.getAttribute('data-toc'))).filter(Boolean);
+      const io = new IntersectionObserver((es) => {
+        es.forEach((e) => {
+          if (e.isIntersecting) {
+            links.forEach((l) => l.classList.remove('on'));
+            map.get(e.target.id)?.classList.add('on');
+          }
+        });
+      }, { rootMargin: '-80px 0px -70% 0px', threshold: 0 });
+      heads.forEach((h) => io.observe(h));
+    }
+  </script>
+</Base>

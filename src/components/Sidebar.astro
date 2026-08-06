@@ -1,0 +1,21 @@
+---
+import type { DocGroup } from '../lib/docs';
+import { sectionIcon, docIcon } from '../lib/icons';
+const { groups, current } = Astro.props as { groups: DocGroup[]; current: string };
+---
+<nav class="sidebar" aria-label="Docs">
+  {groups.map((g) => (
+    <div class="grp">
+      <div class="grp-t"><span class="grp-ic" set:html={sectionIcon(g.slug, 14)} />{g.label}</div>
+      {g.items.map((i) => {
+        const fileSlug = i.slugParam.split('/').pop() || '';
+        return (
+          <a href={i.url} class={i.url === current ? 'on' : ''} aria-current={i.url === current ? 'page' : undefined}>
+            <span class="ic" set:html={docIcon(fileSlug, g.slug, 15)} />
+            <span class="tx">{i.entry.data.title}</span>
+          </a>
+        );
+      })}
+    </div>
+  ))}
+</nav>

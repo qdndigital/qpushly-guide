@@ -1,0 +1,73 @@
+---
+title: Reading the dashboard
+description: What each of the four metric tiles counts, what the growth chart shows, and what none of it can tell you.
+updated: 2026-08-05
+---
+
+import Callout from '../../../components/Callout.astro';
+
+The Dashboard is the first screen in Qpushly. It has four metric tiles, a
+subscriber-growth chart, and a card for your most recent campaign.
+
+## The four tiles
+
+**Revenue generated** — the total value of orders Qpushly could attribute to a
+notification. See [Campaign results](/docs/campaigns/campaign-results) for exactly
+how an order gets attributed; the short version is that a notification click tags
+the cart, and the order carries the tag.
+
+**Subscribers** — how many push subscriptions your store holds. Remember this
+counts *browsers*, so one shopper on a laptop and a phone is two.
+
+**Total campaigns sent** — campaigns that have been published, not automations.
+
+**Impressions consumed** — how many notifications were delivered.
+
+<Callout type="note" title="Delivered is not seen">
+An impression means the notification reached the browser. It does not mean the
+shopper looked at it. A notification that appeared while the laptop lid was shut
+still counts. Treat impressions as your reach, and clicks as your only real
+engagement signal.
+</Callout>
+
+## The growth chart
+
+**Subscriber gain** plots new subscribers per day. The dropdown switches between
+**7, 15, 30 and 60 days**.
+
+What to look for:
+
+- **A flat line at zero** after you enabled the embed usually means the embed is
+  not on your *live* theme, or the prompt is not being reached. Go back to
+  [Turn on the theme app embed](/docs/getting-started/theme-embed).
+- **A step change** normally traces to a traffic source or to adding a
+  `data-qpushly-subscribe` button somewhere new.
+- **A steady drift down in daily additions** with steady traffic is normal — the
+  visitors most willing to subscribe do so first.
+
+## Latest campaign
+
+Shows the most recent campaign with its own counters, so you can check on a send
+without going to the Campaigns list.
+
+## What the dashboard cannot tell you
+
+Being straight about the gaps saves you drawing the wrong conclusion:
+
+- **No unsubscribe count.** When a shopper blocks notifications in their browser,
+  the browser does not tell your store. The subscription simply stops being
+  deliverable. So subscriber count can overstate your reachable audience.
+- **No per-day revenue breakdown.** Revenue is a running total for the range, not
+  a series you can plot against sends.
+- **Impressions are not deduplicated per shopper.** Two devices belonging to the
+  same person are two impressions.
+- **Automations are not broken out here.** For per-automation clicks, impressions,
+  revenue and conversion rate, go to
+  [Automations](/docs/automations/automations-overview) — the list shows all five
+  with their own numbers.
+
+## The free-plan banner
+
+If your store is on the free plan a banner sits at the top of the Dashboard with a
+link to Shopify's plan page. See
+[Plan and billing](/docs/settings/plan-and-billing).

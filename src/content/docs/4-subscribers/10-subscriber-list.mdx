@@ -1,0 +1,83 @@
+---
+title: The subscriber list
+description: What a subscriber is, what Qpushly knows about each one, and how to segment and search the list.
+updated: 2026-08-05
+---
+
+import Callout from '../../../components/Callout.astro';
+
+## A subscriber is a browser
+
+This is the most important thing on the page. A subscriber record represents **one
+browser on one device** that allowed notifications, not a person.
+
+Consequences:
+
+- One shopper on a laptop and a phone is **two subscribers**.
+- Someone who clears their browser data disappears and must opt in again.
+- Two people sharing a computer are **one subscriber**.
+- Your subscriber count is not a customer count and should not be compared to one.
+
+## What each record holds
+
+| Field | Where it comes from |
+| --- | --- |
+| Push endpoint and keys | The browser, at subscribe time. This is the address notifications go to. |
+| Browser, OS, device | Derived from the browser's user agent |
+| Language, timezone | Reported by the browser |
+| Name, email, phone | Only where your own Shopify order data supplies them |
+| City, country | Only where your own order data supplies them |
+| Subscribed date | When they allowed notifications |
+
+<Callout type="note" title="Most subscribers have no email address">
+That is the point of push, not a gap. A subscriber only gains an email address if
+they later place an order and Qpushly can connect the two. Do not plan on being able
+to email your push list.
+</Callout>
+
+## Segments
+
+The list breaks down by three attributes:
+
+**Web browser** — Chrome, Safari, Firefox, Edge and so on.
+**OS** — Windows, macOS, Android, iOS, Linux.
+**Device** — desktop, mobile, tablet.
+
+Useful for:
+
+- **Sanity-checking your reach.** If your storefront analytics say 70% mobile but
+  your subscribers are 80% desktop, that is the iOS restriction showing up — Safari
+  on iPhone only delivers push to home-screen apps.
+- **Diagnosing a delivery complaint.** If one browser's numbers look wrong, you know
+  where to look.
+- **Choosing a campaign audience** when a message is platform-specific.
+
+<Callout type="warning" title="These are not behavioural segments">
+There is no segmentation by spend, order count, tags, or products viewed. If you
+need "everyone who bought twice", that is not something this app can express.
+</Callout>
+
+## Growth over time
+
+The list shows new subscribers over a range you choose, the same 7/15/30/60-day
+windows as the dashboard chart. Use it to check whether a change you made — a new
+invite button, a traffic campaign — moved anything.
+
+## Searching and paging
+
+The list is searchable and paged. Sort by the date subscribed to see your newest.
+
+## Removing a subscriber
+
+Delete the record if a shopper asks you to. Note that deleting the record is not the
+same as the shopper unsubscribing: if their browser permission is still granted and
+they visit your store again, the embed will re-create a subscription. A shopper who
+wants to stop receiving notifications entirely needs to block them in their browser.
+
+## Deletions you do not control
+
+- **A customer redaction request** from Shopify deletes that person's subscriber
+  record, along with their cart history and attributed orders.
+- **Uninstalling Qpushly** eventually removes everything for the store. Export
+  first if you want to keep the list — see
+  [Import and export](/docs/subscribers/import-export).

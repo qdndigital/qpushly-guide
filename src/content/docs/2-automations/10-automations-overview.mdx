@@ -1,0 +1,127 @@
+---
+title: How automations work
+description: The reminder model, delays, the three-reminder limit, and the stats on the automations list — shared by all five.
+updated: 2026-08-05
+---
+
+import Callout from '../../../components/Callout.astro';
+
+All five automations work the same way. Learn this page and the five that follow
+are just the triggers.
+
+## Automations, reminders, runs
+
+Three words that mean different things in Qpushly:
+
+**Automation** — the type. There are exactly five and you cannot create more.
+
+**Reminder** — a message inside an automation. Up to **three** per automation,
+each with its own title, message, buttons, delay and on/off state. Reminder 1
+fires first, then 2, then 3.
+
+**Run** — one reminder queued for one subscriber. A run is scheduled, then sent,
+and then possibly clicked and converted. Runs are what produce the numbers.
+
+## Delays
+
+Every reminder has a **Delay Time**, measured from the moment the automation's
+trigger fired — not from the previous reminder.
+
+So on abandoned cart, delays of 30 minutes, 4 hours and 24 hours mean the shopper
+hears from you at 30 minutes, 4 hours and 24 hours after the cart went quiet.
+
+<Callout type="note" title="The editor enforces order">
+You cannot set a later reminder to a delay shorter than an earlier one — the
+editor disables those options. This prevents reminder 3 arriving before reminder
+2, which would read as nonsense to the shopper.
+</Callout>
+
+## The reminder limit
+
+The ceiling depends on your plan: **one** reminder per automation on the free plan,
+**three** on the paid plan. When you hit it, the **Create Reminder** button is
+disabled and shows the count.
+
+Three is the ceiling on any plan.
+
+This is deliberate. Push is an interruption on someone's screen; a fourth message
+about the same cart is where merchants start losing subscribers who block
+notifications for the domain entirely — and once a shopper blocks you, you cannot
+win them back from inside the app.
+
+<Callout type="tip" title="Start with one">
+Write one reminder, let it run for a week, look at its clicks, then decide whether
+a second earns its place. Most stores find reminder 1 does the bulk of the work.
+</Callout>
+
+## Writing a reminder
+
+**Notification Title** — around 40 characters before most browsers truncate. Lead
+with the thing, not the greeting.
+
+**Message** — one or two lines. Say what and why. If there is a specific product
+involved, name it.
+
+**Primary button** — text plus link. Optional, but a button lifts clicks. Send it
+somewhere specific: the cart, the product, the collection — never the homepage.
+
+**Secondary button** — a genuine second option ("See similar", "Not now"), not a
+duplicate of the first.
+
+**Status** — active or inactive. Inactive keeps your copy but stops new sends.
+
+## Turning one off
+
+Set its status to inactive. Runs already scheduled for that reminder are not sent.
+Nothing is deleted, so you can switch it back on with the copy intact.
+
+## Reading the automations list
+
+The **Automations** page shows all five as cards, each with four numbers:
+
+| Number | What it counts |
+| --- | --- |
+| **Clicks** | Notifications from this automation that were clicked |
+| **Impressions** | Notifications delivered |
+| **Revenue** | Orders attributed back to this automation |
+| **Conv. Rate** | Clicks ÷ impressions, as a percentage |
+
+<Callout type="warning" title="&quot;Conv. rate&quot; here means click rate">
+On the automations list, the conversion-rate column is clicks divided by
+impressions — that is a *click-through* rate, not an order rate. For orders per
+send, compare the Revenue column against Impressions yourself.
+</Callout>
+
+## Which automations your plan includes
+
+**Welcome notifications** are available on every plan — including the free one,
+because an automation you can actually send is the only way to find out whether
+push is worth paying for.
+
+The other four (**abandoned cart**, **browse abandonment**, **back in stock**,
+**price drop**) need the paid plan. They are marked with an *Upgrade* badge on the
+Automations page. See [Plan and billing](/docs/settings/plan-and-billing).
+
+## Which ones to turn on first
+
+1. **[Welcome notifications](/docs/automations/welcome-notifications)** — the
+   easiest win. The subscriber is on your site right now.
+2. **[Back in stock](/docs/automations/back-in-stock)** — needs almost no
+   copywriting and goes to people who already told you they want the product.
+3. **[Abandoned cart](/docs/automations/abandoned-cart)** — the highest value, and
+   the one worth spending time on the copy for.
+4. **[Browse abandonment](/docs/automations/browse-abandonment)** and
+   **[price drop](/docs/automations/price-drop)** — add once you have enough
+   subscribers for the numbers to mean anything.
+
+## Testing without waiting
+
+Automations run on a sweep every ten minutes, so nothing is instant. To test:
+
+1. Subscribe yourself from your own storefront.
+2. Trigger the event — subscribe for welcome, leave a cart for abandoned cart,
+   edit a product's stock or price for the other two.
+3. Wait for the delay plus up to ten minutes.
+
+If nothing arrives, work through
+[Troubleshooting](/docs/help/troubleshooting).

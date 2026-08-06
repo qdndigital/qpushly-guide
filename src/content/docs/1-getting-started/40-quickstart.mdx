@@ -1,0 +1,111 @@
+---
+title: Quickstart
+description: From a fresh install to your first subscriber and your first send, in about ten minutes.
+updated: 2026-08-05
+---
+
+import Callout from '../../../components/Callout.astro';
+
+This walks the shortest path to something working. It assumes you have
+[installed the app](/docs/getting-started/install) and
+[enabled the theme embed](/docs/getting-started/theme-embed).
+
+## 1 · Set your notification defaults · 2 min
+
+**Qpushly → Settings**.
+
+Fill in three fields:
+
+- **Store display name** — the name shoppers see as the sender.
+- **Contact email** — where push services reach you about delivery problems.
+- **Default notification icon URL** — the small square image on every
+  notification. Use a square logo, at least 192×192px. Without one, browsers show
+  a generic bell.
+
+Save. While you are here, check the **Web Push** card shows a key — that means
+your store's signing keypair has been generated. It is created automatically; you
+never handle it.
+
+## 2 · Become your own first subscriber · 1 min
+
+Open your storefront in a normal browser window and accept the notification
+prompt. Then check **Qpushly → Subscribers** — you should be there.
+
+<Callout type="tip">
+Do this before anything else. Every step below needs at least one subscriber to
+send to, and testing on yourself is much faster than waiting for real traffic.
+</Callout>
+
+## 3 · Switch on welcome notifications · 3 min
+
+**Qpushly → Automations → Welcome Notifications → Create Reminder**.
+
+- **Notification Title** — short. Around 40 characters is what most browsers show
+  before truncating.
+- **Message** — one or two lines. Say what they just signed up for and what they
+  get.
+- **Delay Time** — leave it low for the first reminder.
+- **Button text / link** — optional, but a button raises the click rate. Point it
+  at a collection, not your homepage.
+- **Status** — set it to active.
+
+Save. New subscribers now get this automatically.
+
+**Example that works:**
+
+> **Title:** You're on the list
+> **Message:** We'll ping you when new pieces drop and when sold-out sizes come
+> back. First order? Use WELCOME10.
+> **Button:** Shop new in → `/collections/new`
+
+## 4 · Switch on abandoned cart recovery · 3 min
+
+**Qpushly → Automations → Abandoned Cart Recovery**.
+
+Create one reminder to start with. A cart counts as abandoned after **ten
+minutes** of inactivity, and your delay is measured from that point.
+
+Then add a second reminder at a longer delay if the first does not land. Three is
+the maximum.
+
+Do not write all three now. Get one working, see what it earns, then extend.
+
+## 5 · Send a campaign · 2 min
+
+**Qpushly → Campaigns → create a campaign**.
+
+- **Campaign title** — internal name; also used as the notification title.
+- **Description** — the notification body.
+- **Campaign URL** — where a click lands. Use a real collection or product URL.
+- **Image** — optional. A wide product shot works better than a logo here.
+- **Target audience** and **Campaign type** — leave the defaults for a first test.
+- **Publish time** — send now.
+
+You should get the notification within about a minute.
+
+<Callout type="warning" title="Scheduled sends are not instant to the second">
+Qpushly processes scheduled work on a sweep that runs every ten minutes, so a
+campaign scheduled for 09:00 goes out between 09:00 and 09:10. Fine for a drop
+announcement; do not build a countdown around it.
+</Callout>
+
+## 6 · Check the numbers · 1 min
+
+Back on the **Dashboard** you now have four tiles — revenue generated,
+subscribers, campaigns sent, impressions — plus a subscriber-growth chart you can
+switch between 7, 15, 30 and 60 days.
+
+The campaign you just sent shows its own impressions and clicks under
+**Campaigns**. Revenue only appears once a notification click leads to an actual
+order — see [Campaign results](/docs/campaigns/campaign-results) for how that is
+matched.
+
+## What to do in week one
+
+1. Add a **`data-qpushly-subscribe` button** to your sold-out product pages
+   ([how](/docs/getting-started/theme-embed)). This is usually the single biggest
+   change to subscriber growth.
+2. Switch on **back in stock** — it needs no copywriting effort and it sends to
+   people who have already told you they want the product.
+3. Leave **browse abandonment** and **price drop** until you have enough
+   subscribers for the numbers to mean anything.

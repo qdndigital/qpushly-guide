@@ -1,0 +1,5 @@
+---
+import { loadDocs } from '../../lib/docs';
+const infos = await loadDocs();
+return Astro.redirect(infos[0]?.url ?? '/');
+---

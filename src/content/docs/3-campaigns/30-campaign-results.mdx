@@ -1,0 +1,85 @@
+---
+title: Campaign results and attribution
+description: What impressions, clicks and revenue mean, exactly how an order gets attributed to a send, and where attribution misses.
+updated: 2026-08-05
+---
+
+import Callout from '../../../components/Callout.astro';
+
+## The numbers on a campaign
+
+**Impressions** — notifications delivered to a browser. Reach, not attention.
+
+**Clicks** — the shopper tapped the notification or one of its buttons.
+
+**Orders** — orders Qpushly was able to attribute to this campaign.
+
+**Revenue** — the value of those orders.
+
+**CTR** — clicks ÷ impressions.
+
+The Campaigns list also shows totals across all campaigns, and each row carries a
+status: `DRAFT`, `SCHEDULED`, `PUBLISHED` or `ARCHIVED`.
+
+## How attribution actually works
+
+Worth understanding, because it explains both the numbers you get and the ones you
+don't:
+
+1. A shopper **clicks** the notification. The link carries a campaign tag.
+2. The embed stores that tag and **writes it onto the shopper's cart** as a cart
+   attribute.
+3. The shopper checks out.
+4. Shopify sends Qpushly the **order**, carrying the cart attribute.
+5. Qpushly matches the tag and credits the order to the campaign.
+
+## Where attribution misses
+
+Every attribution model has holes. These are Qpushly's, so you know which way the
+numbers lean:
+
+**The click window expires.** The campaign tag on a click is valid for about
+**30 minutes**. A shopper who taps a notification at lunchtime and buys that
+evening is not attributed — the order is real, the credit is not.
+
+**Cross-device buying.** They tap on their phone, buy on their laptop. The tag was
+on the phone's cart. Unattributed.
+
+**Clearing the cart.** Some themes and apps rebuild the cart in a way that drops
+custom attributes. The tag goes with them.
+
+**No click, but influenced.** A shopper sees the notification, does not tap it,
+opens your site directly and buys. Nothing to attribute.
+
+<Callout type="warning" title="Attributed revenue is a floor, not a total">
+Every one of the gaps above pushes the reported number *down*, never up. So treat
+attributed revenue as the minimum push earned you. It is useful for comparing
+campaigns against each other — the bias is consistent — but it will understate
+push's real contribution.
+</Callout>
+
+## Reading the numbers usefully
+
+**Compare like with like.** Campaign A against campaign B, both measured the same
+way, is a fair comparison. Campaign revenue against your email platform's revenue
+is not — the two attribute completely differently, and both will claim the same
+order.
+
+**Watch CTR, not impressions.** Impressions grow with your list whatever you write.
+CTR tells you whether the writing worked.
+
+**Look for a falling CTR across consecutive sends.** That is subscriber fatigue,
+and it arrives before the unsubscribes you cannot see.
+
+**A high CTR with no orders** means the notification promised something the landing
+page did not deliver. Check the link.
+
+## What is not reported
+
+- **Unsubscribes.** When a shopper blocks notifications, their browser does not
+  tell your store. There is no unsubscribe count anywhere in the app, and
+  subscriber count therefore overstates your reachable audience.
+- **Dismissals.** No way to know a notification was swiped away unread.
+- **Per-day breakdowns.** Campaign counters are running totals.
+- **Revenue net of refunds.** Attributed revenue is order value at the time of the
+  order.

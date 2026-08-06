@@ -1,0 +1,79 @@
+---
+title: Scheduling and audience
+description: Sending later, choosing who receives it, and the ten-minute sweep you need to plan around.
+updated: 2026-08-05
+---
+
+import Callout from '../../../components/Callout.astro';
+
+## Send now or schedule
+
+**Publish time** offers an immediate send or a scheduled one. Scheduling is the
+better default for anything that is not urgent — you can write it when you have
+time and let it land when your shoppers are awake.
+
+<Callout type="warning" title="Scheduled sends land in a ten-minute window">
+Qpushly processes scheduled work on a sweep that runs every ten minutes. A campaign
+set for 09:00 goes out between 09:00 and 09:10.
+
+For a drop announcement or a sale, that is irrelevant. For anything where the
+notification has to arrive *before* a specific moment — a countdown, a livestream,
+a doors-open time — schedule it **fifteen minutes early** and let it be early
+rather than late.
+</Callout>
+
+## Picking a time
+
+Push arrives on someone's phone or desktop the moment it is delivered. There is no
+inbox to wait in, so timing matters more than it does for email.
+
+- **Avoid night hours in your main market.** A notification at 3am is how you get
+  blocked. Qpushly has no quiet-hours setting, so this is entirely down to when you
+  schedule.
+- **Your subscribers' timezones are recorded** — the subscriber list shows the
+  spread. Send for wherever most of them are, not for wherever you are.
+- **Mid-morning and early evening** are the conventional windows. Test against your
+  own click numbers rather than trusting that.
+
+## End date
+
+Optional. Use it for a campaign that stops being true — a weekend sale, a
+limited-quantity drop. It stops the campaign continuing to count as live after the
+offer has gone.
+
+## Target audience
+
+Chooses who receives the campaign. The default sends to your whole subscriber list,
+which is the right choice for most announcements.
+
+Reasons to narrow it:
+
+- The message only applies to some devices (an Android-specific issue, say).
+- You are testing copy and want a smaller group first.
+
+<Callout type="note" title="Audience is not behavioural segmentation">
+Qpushly segments subscribers by browser, operating system and device — attributes
+of the subscription. It does not build segments from purchase history, spend, or
+tags. If you need "everyone who bought in the last 90 days", that is not something
+this app can target.
+</Callout>
+
+## Campaign type
+
+**Regular** — the default; use it for anything ordinary.
+
+**Flash** — for short-lived, time-boxed sends. Pair it with an end date so the
+campaign closes itself.
+
+## A test-first habit
+
+Before a big send:
+
+1. Set the audience to something small, or send to yourself first.
+2. Check the notification on a **phone** as well as a desktop — truncation differs.
+3. Tap the button and confirm the landing page is right.
+4. Then send to everyone.
+
+The cost of a broken link in a push notification is higher than in an email: there
+is no way to follow up with a correction that the shopper will connect to the
+original.

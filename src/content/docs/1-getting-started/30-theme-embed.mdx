@@ -1,0 +1,139 @@
+---
+title: Turn on the theme app embed
+description: The one setup step that is genuinely required. Without it Qpushly collects nothing.
+updated: 2026-08-05
+---
+
+import Callout from '../../../components/Callout.astro';
+
+Qpushly's storefront half is a **theme app embed**. It is off by default, because
+Shopify does not let an app add code to your theme without you switching it on.
+
+<Callout type="danger" title="Nothing works until this is done">
+No embed means no service worker on your storefront, which means no visitor can
+subscribe, which means every screen in Qpushly stays empty and no automation can
+ever fire. If you only do one thing from this guide, do this.
+</Callout>
+
+## Steps
+
+1. In your Shopify admin, go to **Online Store → Themes**.
+2. On your **live** theme, click **Customize**.
+3. In the left sidebar of the theme editor, click the **App embeds** icon (the
+   puzzle-piece near the bottom).
+4. Find **Qpushly Embed** in the list and switch its toggle **on**.
+5. Click **Save**.
+
+## Check that it worked
+
+Open your storefront in a **normal** browser window — not private/incognito, and
+not the theme editor's preview.
+
+After a few seconds you should see **Qpushly's invite** (not the browser's own
+dialog — that only appears after you click accept). Click the accept button, then
+allow notifications when the browser asks.
+
+Then go back to the app: **Qpushly → Subscribers**. Your own browser should now be
+in the list, with its browser, OS and device filled in.
+
+<Callout type="tip" title="If you have already dismissed it">
+Two separate things remember your answer:
+
+- **The browser**, if you blocked notifications. Click the padlock or tune icon in
+  the address bar → **Notifications** → reset to "Ask" (Chrome/Edge: Site settings
+  → Notifications → Reset permission).
+- **Qpushly's invite**, if you clicked "Not now" — remembered for 14 days. Clear
+  the site's local storage, or delete the `qpushly_prompt_dismissed_at` key.
+
+Then reload.
+</Callout>
+
+## Things that stop the prompt appearing
+
+**You are on a `.myshopify.com` preview or the theme editor.** Service workers
+need a real page load on your storefront domain. Visit the actual storefront URL.
+
+**Your store has password protection on.** A password-protected storefront can
+still load the embed, but if you are stuck, turn the password off temporarily
+while you test.
+
+**You are testing on iPhone or iPad.** Safari on iOS only delivers web push to a
+site the shopper has added to their home screen. Test on desktop Chrome first.
+
+**You already blocked notifications, or declined the invite.** See the tip above —
+these are two different pieces of state.
+
+**You enabled the embed on a theme that is not live.** Check you clicked
+**Customize** on the theme marked *Current theme*.
+
+## Settings on the embed
+
+Click **Qpushly Embed** in the App embeds list to open its settings.
+
+### Subscribe prompt
+
+Qpushly does **not** go straight to the browser's permission dialog. It shows its
+own invite first, and only opens the browser dialog when a shopper accepts.
+
+<Callout type="note" title="Why it works that way">
+A browser gives you exactly one permission request per visitor, and a shopper who
+blocks notifications can never be asked again — by any app. Spending that one
+request on someone who is not interested loses them permanently. Asking with your
+own invite first means you only spend it on people who already said yes.
+
+It also matters on Safari: macOS and iOS refuse a permission request that did not
+come from a click, so the browser-first approach silently fails there.
+</Callout>
+
+| Setting | What it does |
+| --- | --- |
+| **Show the subscribe invite automatically** | Off = Qpushly never asks on its own; you ask from your own button (below). |
+| **Wait before showing** | Seconds after page load. A few seconds converts better than asking on arrival. |
+| **Position** | Bottom right/left, bottom centre, or top centre. |
+| **Invite heading / message** | Your copy. Say what they will actually get. |
+| **Accept / Decline button** | Your labels. |
+
+A shopper who declines is not asked again for **14 days**.
+
+### Automation tracking
+
+Two toggles, both on by default:
+
+- **Track carts** — required for [Abandoned cart recovery](/docs/automations/abandoned-cart).
+- **Track product views** — required for [Browse abandonment](/docs/automations/browse-abandonment), [Back in stock](/docs/automations/back-in-stock) and [Price drop](/docs/automations/price-drop).
+
+Turning one off stops that script loading on your storefront — useful if you do not
+use those automations and want the lightest possible page.
+
+<Callout type="warning">
+Turning a tracker off does not disable the automation; it removes the data the
+automation needs, so it simply stops finding anyone to send to.
+</Callout>
+
+## Asking from your own button
+
+The invite is convenient, but the highest-converting place to ask is a moment when
+the shopper obviously wants it — a sold-out size, for instance. Add the attribute
+`data-qpushly-subscribe` to any element in your theme:
+
+```html
+<button type="button" data-qpushly-subscribe>
+  Notify me when it's back
+</button>
+```
+
+Clicking that element asks for permission and subscribes the visitor. It works
+whether or not the automatic invite is switched on.
+
+<Callout type="tip" title="Asking at the right moment gets more subscribers">
+An invite that arrives the instant someone lands on your homepage is easy to
+dismiss. One that arrives when they have just tried to buy a sold-out size is one
+they actually want. If you only add one button, put it on your sold-out product
+pages.
+</Callout>
+
+## Removing it
+
+Switch the same toggle off and Save. The embed stops loading immediately and
+nothing is left behind in your theme. Existing subscribers stay in your list but
+stop growing.

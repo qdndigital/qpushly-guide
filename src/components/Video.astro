@@ -1,0 +1,32 @@
+---
+/**
+ * <Video src="..." title="..." />
+ * - YouTube (watch / youtu.be / embed) → auto-embed
+ * - Cloudflare Stream / Mux / Vimeo embed URLs → used as-is (iframe)
+ * - Direct .mp4 / .webm (e.g. from your CDN bucket) → <video> player
+ */
+const { src, title = 'Video' } = Astro.props as { src: string; title?: string };
+const isFile = /\.(mp4|webm|mov|m4v)(\?.*)?$/i.test(src);
+
+function toEmbed(u: string): string {
+  const yt = u.match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([\w-]{11})/);
+  if (yt) return `https://www.youtube-nocookie.com/embed/${yt[1]}`;
+  const vimeo = u.match(/vimeo\.com\/(\d+)/);
+  if (vimeo) return `https://player.vimeo.com/video/${vimeo[1]}`;
+  return u; // already an embed URL (Cloudflare Stream / Mux / etc.)
+}
+const embed = isFile ? src : toEmbed(src);
+---
+<div class="video">
+  {isFile ? (
+    <video controls preload="metadata" playsinline src={embed}></video>
+  ) : (
+    <iframe
+      src={embed}
+      title={title}
+      loading="lazy"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+      allowfullscreen
+    ></iframe>
+  )}
+</div>

@@ -1,0 +1,69 @@
+---
+title: Settings
+description: Store name, contact email, notification defaults, branding, and the web-push key status card.
+updated: 2026-08-05
+---
+
+import Callout from '../../../components/Callout.astro';
+
+**Qpushly → Settings.** Five cards.
+
+## General
+
+**Store display name** — the name shoppers associate with the notification. Use the
+name they know you by, not your legal entity.
+
+**Contact email** — embedded in the signed request Qpushly sends to push services
+(Google, Mozilla, Apple). Those services use it to reach you if your store starts
+producing delivery problems. Set a real, monitored address.
+
+<Callout type="warning" title="Set the contact email">
+If you leave this blank, a generic fallback is used. It is not a hard failure, but it
+means the one channel a push service has for warning you about a delivery problem
+goes nowhere.
+</Callout>
+
+## Notification defaults
+
+**Default notification icon URL** — the small square image on every notification.
+Square, at least 192×192px, and it should read clearly at about 48px because that is
+how big it usually appears. Without one, browsers show a generic bell.
+
+**Default click URL** — where a notification goes when it has no link of its own. Set
+it to a collection you are happy to land people on.
+
+## Branding
+
+**Logo upload** — uploaded to your own Shopify Files and served from Shopify's CDN.
+Under 5MB.
+
+## Web Push
+
+Read-only status. It shows whether your store's signing keypair has been generated,
+and the public half of it.
+
+You never need to touch this. The keypair is created automatically the first time
+your store needs it, and it proves to browsers that a notification genuinely came
+from your store.
+
+<Callout type="note" title="What the keypair means for you">
+It is generated **per store** and stored against your store's session. If that session
+is ever wiped — for instance if you uninstall and reinstall — a new keypair is
+generated, and push subscriptions created under the old key stop being deliverable.
+The storefront detects this on the shopper's next visit and re-subscribes them
+automatically, but subscribers who never return again are lost.
+
+The practical advice: **avoid uninstall/reinstall cycles** on a store with a
+subscriber list you care about.
+</Callout>
+
+## Plan & billing
+
+Shows your current plan and links to Shopify's plan page. See
+[Plan and billing](/docs/settings/plan-and-billing).
+
+## Storefront embed
+
+A reminder of the theme-embed step and its status. If you are on this page because
+something is not working, start at
+[Turn on the theme app embed](/docs/getting-started/theme-embed).

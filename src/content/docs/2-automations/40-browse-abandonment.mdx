@@ -1,0 +1,75 @@
+---
+title: Browse abandonment
+description: Following up on a product someone looked at and left — and why it is a different message from cart recovery.
+updated: 2026-08-05
+---
+
+import Callout from '../../../components/Callout.astro';
+
+**Fires when:** a subscriber viewed a product and did not buy it.
+
+Most shoppers never reach the cart. Browse abandonment is the follow-up for the
+much larger group who looked, thought about it, and left.
+
+## How it differs from cart recovery
+
+| | Abandoned cart | Browse abandonment |
+| --- | --- | --- |
+| Trigger | Cart went quiet | Product viewed, not bought |
+| Intent | High — they had committed | Lower — they were considering |
+| Right tone | "Your cart is waiting" | "Here's what you were looking at" |
+| Volume | Lower | Much higher |
+
+<Callout type="warning" title="Do not reuse your cart copy here">
+"You left something in your cart!" is wrong and slightly unsettling when the
+shopper never added anything. It reads as if you watched them. Write for someone
+who was browsing, because that is what happened.
+</Callout>
+
+## Set it up
+
+**Automations → Browse Abandonment.**
+
+Start with **one** reminder. This automation has the highest volume of the five —
+every product page view by a subscriber is a candidate — so it is also the one
+most likely to annoy people if you send three.
+
+Use a longer delay than you would for a cart. A few hours, or the next day, reads
+as helpful; twenty minutes reads as surveillance.
+
+## What to write
+
+Reference the product without implying commitment, and give an easy way to look
+at alternatives.
+
+> **Title:** Still looking at the Kiln Mug?
+> **Message:** It's in Slate and Bone, and both are in stock right now.
+> **Primary button:** View it again → the product URL
+> **Secondary button:** See the collection → the collection URL
+
+The secondary button matters more here than anywhere else. If they did not buy,
+there is a decent chance the reason was the product itself — so offer the
+neighbours.
+
+## What it skips
+
+- Products the shopper has since **added to their cart** — abandoned cart takes
+  over from there, and the two never both fire for the same item.
+- Products they **bought**.
+
+## Volume control
+
+There is no per-day cap in the app. If you find this automation sending more than
+you are comfortable with, your levers are:
+
+1. **One reminder only.**
+2. **A longer delay** — pushing it to the next day naturally reduces how many
+   shoppers still qualify.
+3. **Switch it off** and rely on cart recovery plus back-in-stock, which are the
+   two automations shoppers rarely object to.
+
+<Callout type="tip">
+Watch the click rate on the automations list. If browse abandonment has high
+impressions and a click rate well below your other automations, it is being
+ignored — which means it is costing you goodwill for nothing. Turn it off.
+</Callout>

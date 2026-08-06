@@ -1,0 +1,88 @@
+---
+title: Abandoned cart recovery
+description: How Qpushly knows a cart was abandoned, how the sequence works, and how recovery stops it.
+updated: 2026-08-05
+---
+
+import Callout from '../../../components/Callout.astro';
+
+**Fires when:** a cart has sat untouched for **ten minutes**.
+
+This is the automation most stores install Qpushly for. It reaches a shopper who
+never gave you an email address, on the device they were shopping on, where the
+cart is one tap away.
+
+## How Qpushly knows
+
+The theme app embed sends a snapshot of the cart — items, value, currency —
+whenever the cart changes. If ten minutes pass with no further change and the
+visitor is a subscriber, the cart is marked abandoned and your first reminder is
+queued.
+
+<Callout type="note" title="Subscribers only">
+A cart belonging to someone who never allowed notifications cannot be recovered
+this way — there is no address to send to. Growing subscribers and recovering carts
+are the same job; see the invite button in
+[Turn on the theme app embed](/docs/getting-started/theme-embed).
+</Callout>
+
+## The sequence
+
+Up to three reminders, each with its own delay measured from the moment the cart
+was marked abandoned.
+
+A starting point that works for most stores:
+
+| Reminder | Delay | Job |
+| --- | --- | --- |
+| 1 | 30 min | Nudge — they may still be deciding |
+| 2 | 4–6 hours | Reason to come back — shipping, returns, stock |
+| 3 | 24 hours | Last call, if you use one at all |
+
+## Recovery stops the rest
+
+When the cart is recovered, the sequence stops — remaining reminders are not sent.
+The cart is marked recovered and linked to the order, which is what puts it in the
+Revenue column.
+
+So a shopper who buys after reminder 1 never receives 2 and 3. You do not need to
+build that logic yourself.
+
+## What to write
+
+Reminder 1 should not sell. They were there a moment ago; they know what it is.
+Short, name the item, one button to the cart.
+
+> **Title:** Still thinking it over?
+> **Message:** Your Alder Wool Overshirt is waiting in your cart.
+> **Button:** Back to cart → `/cart`
+
+Reminder 2 needs a *reason*, not more urgency. Whatever the actual objection is —
+shipping cost, returns risk, whether it will arrive in time — answer it.
+
+> **Title:** Free returns for 30 days
+> **Message:** Your cart's still here. Returns are free and we ship same-day
+> before 2pm.
+> **Button:** Complete your order → `/cart`
+
+<Callout type="warning" title="Discounting in reminder 1 costs you money">
+If your first reminder always carries a code, shoppers learn to abandon the cart
+to get it. If you discount at all, put it in reminder 3, when the alternative is
+losing the sale.
+</Callout>
+
+## Things to know
+
+- **Ten minutes is fixed.** The abandonment threshold is not configurable; your
+  control is the reminder delay on top of it.
+- **The sweep runs every ten minutes.** A 30-minute reminder arrives somewhere
+  between 30 and 40 minutes.
+- **A cart that changes resets the clock.** Adding another item counts as activity.
+- **One sequence per cart**, not per item.
+
+## If it is not sending
+
+Most often the cart snapshots are not arriving, which means the theme embed is not
+on your live theme. Check **Subscribers** first: if that list is empty or stale,
+fix the embed before looking at the automation. Full checklist in
+[Troubleshooting](/docs/help/troubleshooting).

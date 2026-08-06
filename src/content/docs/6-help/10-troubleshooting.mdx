@@ -1,0 +1,102 @@
+---
+title: Troubleshooting
+description: The five problems that account for almost every support request, in the order you should check them.
+updated: 2026-08-05
+---
+
+import Callout from '../../../components/Callout.astro';
+
+Work down this page in order. The first section fixes the majority of cases.
+
+## 1 · No subscribers at all
+
+<Callout type="danger" title="Check the theme embed first">
+An empty subscriber list almost always means the **theme app embed is not enabled on
+your live theme**. Installing the app does not put anything on your storefront.
+
+Online Store → Themes → Customize (on the *current* theme) → App embeds → enable
+**Qpushly Embed** → **Save**.
+
+Full walkthrough: [Turn on the theme app embed](/docs/getting-started/theme-embed).
+</Callout>
+
+If the embed is on and the list is still empty, in this order:
+
+1. **You enabled it on the wrong theme.** Check the theme marked *Current theme*.
+2. **You are testing in the theme preview or editor.** Service workers need a real
+   page load on your storefront domain.
+3. **You are testing in private/incognito.** Push subscriptions do not persist there.
+4. **You already dismissed or blocked the prompt.** Browsers ask once. Reset it:
+   padlock/tune icon in the address bar → Notifications → reset to Ask → reload.
+5. **You are testing on iPhone or iPad.** Safari on iOS only delivers web push to a
+   site added to the home screen. Test on desktop Chrome.
+
+## 2 · A notification did not arrive
+
+Check in this order:
+
+**Is the reminder or campaign active?** Inactive reminders are not sent. A campaign
+must be published, not left as a draft.
+
+**Has enough time passed?** Everything scheduled runs on a sweep every **ten
+minutes**, on top of whatever delay you configured. A 30-minute reminder can arrive at
+40 minutes.
+
+**Did the trigger actually happen?**
+
+- *Abandoned cart* — the cart must be untouched for ten minutes. Adding an item resets
+  the clock.
+- *Back in stock* — inventory must genuinely cross from zero to non-zero, on a variant
+  that shopper viewed **while it was sold out**.
+- *Price drop* — the new price must be lower than the price *that shopper* saw.
+- *Welcome* — only fires for a new subscriber. Existing subscribers never get it again.
+
+**Is the recipient still deliverable?** A shopper who blocked notifications is
+undeliverable, and their browser does not tell your store — so they still appear in
+your subscriber list. See [the note on unsubscribes](/docs/campaigns/campaign-results).
+
+**Is your OS suppressing it?** Focus assist, Do Not Disturb, and macOS notification
+settings all hide notifications that were delivered successfully. Check your system
+notification centre before concluding it was never sent.
+
+## 3 · The whole subscriber list stopped receiving anything
+
+This is the signature of a **changed signing key**. Your store's keypair lives with
+your store's session; if that session was wiped — most commonly by an
+uninstall/reinstall — a new keypair is generated and every existing subscription was
+signed with the old one.
+
+Subscriptions signed with the old key are silently rejected by push services. The
+storefront repairs this automatically on each shopper's **next visit**, so the list
+recovers as people return, but subscribers who never come back are lost.
+
+Check **Settings → Web Push** for your current public key. And see the warning in
+[Settings](/docs/settings/general-settings) about avoiding uninstall/reinstall cycles.
+
+## 4 · Duplicate notifications
+
+Almost always **two push apps on one storefront**. If a previous provider's script is
+still in your theme, shoppers can hold two subscriptions and receive everything twice —
+and neither app's numbers will be trustworthy.
+
+Remove the old provider's embed or script tag. See
+[Import and export](/docs/subscribers/import-export).
+
+## 5 · Revenue looks too low
+
+It is a floor, not a total — by design. The click tag that carries attribution is
+valid for about **30 minutes**, lives on one device's cart, and can be dropped by a
+theme or app that rebuilds the cart. Cross-device purchases and delayed purchases are
+therefore never attributed.
+
+Full explanation of every gap: [Campaign results and attribution](/docs/campaigns/campaign-results).
+
+## Still stuck
+
+Two facts turn a support email into a same-day fix:
+
+1. Your **`myshopify.com` domain**.
+2. Whether **Qpushly Embed is enabled on your live theme** — check, don't assume.
+
+If it is about a notification that did not arrive, add the **browser and OS** of the
+device you expected it on, and roughly **when** you expected it.

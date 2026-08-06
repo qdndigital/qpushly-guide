@@ -1,0 +1,70 @@
+---
+title: Price-drop alerts
+description: Telling shoppers when something they looked at gets cheaper — and when not to use this.
+updated: 2026-08-05
+---
+
+import Callout from '../../../components/Callout.astro';
+
+**Fires when:** a product falls below the price a subscriber saw when they viewed it.
+
+For shoppers whose hesitation was the price, this is the message that resolves it.
+
+## How it works
+
+When a subscriber views a product, Qpushly stores the price at that moment.
+Shopify tells the app when the product changes; if the new price is lower than the
+price that shopper saw, they get the alert.
+
+The comparison is **per shopper**, against what *they* saw — not against your
+compare-at price. Two people who viewed the same product at different prices can
+therefore get different treatment, which is the correct behaviour.
+
+<Callout type="note">
+A price increase never sends anything.
+</Callout>
+
+## Set it up
+
+**Automations → Price Drop.**
+
+One reminder, short delay. Include both prices — the drop is the whole message, and
+a number they recognise makes it credible.
+
+> **Title:** Price drop on something you viewed
+> **Message:** Harbour Canvas Tote is now £38, down from £52.
+> **Button:** See the deal → the product URL
+
+## When not to use this
+
+Price-drop alerts are the automation most likely to work against you. Two cases:
+
+**You discount often.** If shoppers learn that waiting produces a notification
+with a lower number, you have trained them to wait. Full-price sales fall. If your
+calendar has a sale every month, leave this one off.
+
+**You are about to run a site-wide sale.** A 30%-off weekend can fire a price-drop
+alert for every product every subscriber has ever viewed. There is no built-in cap
+on that.
+
+<Callout type="danger" title="Turn this off before a site-wide sale">
+Set the reminder to inactive before you apply sale pricing across your catalogue,
+and switch it back on afterwards. Otherwise your most engaged subscribers get a
+burst of notifications in one afternoon, which is exactly how a shopper decides to
+block notifications for your domain — permanently, and with no way for you to
+undo it.
+</Callout>
+
+## Where it does work well
+
+- **End-of-season markdowns on a handful of lines.** Genuine, infrequent, and the
+  people who viewed those items at full price are the right audience.
+- **Stores that rarely discount.** Here a price drop is real news.
+- **Single-item promotions** — one product, one alert, no blast.
+
+## Things to know
+
+- **It needs the products permission**, granted at install.
+- The comparison uses the price recorded at view time, so a shopper who viewed the
+  product several times is compared against the most recent price they saw.
+- Like every automation, delivery waits for the ten-minute sweep.
