@@ -1,6 +1,6 @@
 /**
  * Qpushly Guide — "Polaris Pro" design tokens, shared with the Qpushly site.
- * White ground, cool grays, accent driven by CSS vars from src/config.ts, Inter,
+ * White ground, cool grays, accent driven by CSS vars from src/config.ts, Be Vietnam Pro,
  * light borders, minimal shadow. Token names kept (`paper`, `surface`…)
  * so existing utility classes reskin from just src/config.ts.
  */
@@ -27,8 +27,7 @@ export default {
         },
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
-        serif: ['"Instrument Serif"', 'Georgia', 'serif'],
+        sans: ['Be Vietnam Pro', 'system-ui', '-apple-system', 'sans-serif'],
         mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
       },
       fontSize: {

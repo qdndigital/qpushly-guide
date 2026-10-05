@@ -10,7 +10,7 @@ ideally land in both.
 
 - 21 articles across 6 topics
 - Astro 4 + MDX, static output, one small client script
-- Self-hosted Inter / JetBrains Mono / Instrument Serif — no third-party origin
+- Self-hosted Be Vietnam Pro (brand font) / JetBrains Mono — no third-party origin
 - Deploys to Netlify (`netlify.toml` included), intended for `guide.qpushly.com`
 
 ## Run
