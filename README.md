@@ -83,7 +83,9 @@ its section's generic icon — not an error, but it looks unfinished next to the
 ## Theming — `src/config.ts`
 
 One file. `preset: 'qpushly'` selects the blue accent (`#2f6fed`) and the "signal"
-logo glyph from the shared QDN-family preset table.
+logo glyph from the shared QDN-family preset table. For `qpushly` the header logo
+is the real brand symbol (`QPUSHLY_MARK` in `src/config.ts`, from the app's
+`public/brand/` kit) and `public/favicon.svg` is the brand app icon.
 
 > **Engine change made here:** the original template claimed a one-file reskin but
 > hardcoded QSortby's green in several places — `#cbe8da` borders, `#dbece4` card
