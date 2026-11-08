@@ -1,0 +1,238 @@
+---
+import { loadDocs } from '../lib/docs';
+import { docIcon, icon } from '../lib/icons';
+
+const POPULAR = ['getting-started/quickstart', 'getting-started/theme-embed', 'automations/abandoned-cart', 'campaigns/create-campaign'];
+const docs = await loadDocs();
+const sentenceCase = (s: string) => s.charAt(0).toUpperCase() + s.slice(1).toLowerCase();
+const suggestions = [
+  ...POPULAR.flatMap((slug) => {
+    const d = docs.find((x) => x.slugParam === slug);
+    return d ? [{ title: d.entry.data.title, url: d.url, meta: sentenceCase(d.sectionLabel), svg: docIcon(slug.split('/').pop() ?? '', d.sectionSlug, 16) }] : [];
+  }),
+  { title: 'Troubleshooting', url: '/docs/help/troubleshooting', meta: 'Help', svg: icon('buoy', 16) },
+  { title: 'Frequently asked questions', url: '/docs/help/faq', meta: 'Help', svg: icon('help', 16) },
+];
+---
+<link rel="stylesheet" href="/pagefind/pagefind-ui.css" />
+
+<dialog id="searchDialog" class="search-dialog" aria-label="Search the guide">
+  <button type="button" id="searchClose" class="sd-close" aria-label="Close search">
+    <span class="sd-close-d">Esc</span><span class="sd-close-m">Cancel</span>
+  </button>
+
+  <div id="pfContainer" class="pf-container">
+    <!-- Stand-in until Pagefind UI mounts: styled by the same rules as its input, and typeable. -->
+    <div class="pf-skel">
+      <input class="pf-skel-input" type="text" placeholder="Search the guide…" autocomplete="off" spellcheck="false" aria-label="Search the guide" />
+    </div>
+  </div>
+
+  <div id="searchSuggest" class="sd-suggest">
+    <p class="sd-kicker">Popular</p>
+    {suggestions.map((s) => (
+      <a class="sd-row" href={s.url} data-nav>
+        <span class="sd-row-ic" set:html={s.svg} />
+        <span class="sd-row-t">{s.title}</span>
+        <span class="sd-row-m">{s.meta}</span>
+      </a>
+    ))}
+  </div>
+
+  <div class="sd-foot">
+    <span><kbd>↑</kbd><kbd>↓</kbd> to navigate</span>
+    <span><kbd>↵</kbd> to open</span>
+    <span><kbd>esc</kbd> to close</span>
+  </div>
+</dialog>
+
+<style>
+  /* ---- shell: a command palette anchored near the top, so results grow downward without moving the input ---- */
+  .search-dialog { width:min(640px, calc(100vw - 24px)); max-height:min(620px, calc(100dvh - 20vh)); margin:12vh auto auto;
+    padding:0; border:1px solid var(--line); border-radius:16px; background:var(--paper); color:var(--ink);
+    box-shadow:0 1px 2px rgba(16,24,40,.06), 0 24px 64px -16px rgba(16,24,40,.32); overflow:hidden; }
+  .search-dialog[open] { display:flex; flex-direction:column; animation:sd-in .16s var(--ease); }
+  .search-dialog::backdrop { background:rgba(30,30,26,.32); backdrop-filter:blur(3px); }
+  @keyframes sd-in { from { opacity:0; transform:translateY(-8px) scale(.985); } }
+  @media (prefers-reduced-motion:reduce) { .search-dialog[open] { animation:none; } }
+  @media (max-width:767px) { .search-dialog { margin-top:12px; max-height:calc(100dvh - 24px); } }
+
+  .sd-close { position:absolute; top:15px; right:14px; z-index:2; height:26px; padding:0 8px; border-radius:6px;
+    font-family:var(--mono); font-size:11px; color:var(--muted); background:var(--paper-2); border:1px solid var(--line); }
+  .sd-close:hover { color:var(--ink); border-color:var(--line-2); }
+  .sd-close-m { display:none; }
+  @media (max-width:767px) { .sd-close { font-family:inherit; font-size:14px; background:none; border:0; color:var(--accent-ink); } .sd-close-d { display:none; } .sd-close-m { display:inline; } }
+
+  /* ---- Pagefind UI, restyled to the site ---- */
+  .pf-container { flex:0 1 auto; min-height:0; display:flex; flex-direction:column; --pagefind-ui-font:inherit; --pagefind-ui-scale:1; }
+  #pfContainer :global(.pagefind-ui), #pfContainer :global(.pagefind-ui__form) { display:flex; flex-direction:column; min-height:0; flex:1; font-family:inherit; }
+
+  /* Input row — shared by the stand-in and the real input so the swap is pixel-identical. */
+  .pf-skel, #pfContainer :global(.pagefind-ui__form) { position:relative; }
+  .pf-skel::before, #pfContainer :global(.pagefind-ui__form)::before { content:""; position:absolute; z-index:1; pointer-events:none;
+    top:19px; left:18px; width:18px; height:18px; opacity:1; background-color:var(--muted);
+    -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='%23000' stroke-width='1.8' stroke-linecap='round'%3E%3Ccircle cx='9' cy='9' r='6.5'/%3E%3Cpath d='M18 18l-4.3-4.3'/%3E%3C/svg%3E") center / 100% no-repeat;
+            mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='%23000' stroke-width='1.8' stroke-linecap='round'%3E%3Ccircle cx='9' cy='9' r='6.5'/%3E%3Cpath d='M18 18l-4.3-4.3'/%3E%3C/svg%3E") center / 100% no-repeat; }
+  .pf-skel-input, #pfContainer :global(.pagefind-ui__search-input) { display:block; width:100%; height:56px; box-sizing:border-box; flex:none;
+    padding:0 96px 0 48px; margin:0; border:0; border-bottom:1px solid var(--line); border-radius:0; background:transparent;
+    font:inherit; font-size:16px; font-weight:500; letter-spacing:-.01em; color:var(--ink); appearance:none; -webkit-appearance:none; }
+  .pf-skel-input::placeholder, #pfContainer :global(.pagefind-ui__search-input::placeholder) { color:var(--faint); opacity:1; font-weight:400; }
+  .pf-skel-input:focus, #pfContainer :global(.pagefind-ui__search-input:focus) { outline:none; }
+  #pfContainer :global(.pagefind-ui__search-clear) { display:none; }
+
+  #pfContainer :global(.pagefind-ui__drawer) { flex:1; min-height:0; overflow-y:auto; padding:6px 8px 10px; overscroll-behavior:contain; }
+  #pfContainer :global(.pagefind-ui__results-area) { margin:0; }
+  #pfContainer :global(.pagefind-ui__message) { margin:0; padding:10px 10px 6px; height:auto;
+    font-family:var(--mono); font-size:11px; font-weight:500; letter-spacing:.07em; text-transform:uppercase; color:var(--faint); }
+  #pfContainer :global(.pagefind-ui__results) { list-style:none; margin:0; padding:0; }
+  #pfContainer :global(.pagefind-ui__results-area) { min-width:0; margin:0; }
+  #pfContainer :global(.pagefind-ui__result) { padding:0; margin:0 0 2px; border:0; display:block; gap:0; }
+  #pfContainer :global(.pagefind-ui__result-inner) { position:relative; display:flex; flex-direction:column; align-items:stretch;
+    margin:0; padding:10px 12px; border-radius:10px; transition:background-color .12s; }
+  #pfContainer :global(.pagefind-ui__result-inner:hover:not(:has(.pagefind-ui__result-nested:hover))),
+  #pfContainer :global(.pagefind-ui__result-inner:has(> .pagefind-ui__result-title a:focus-visible)) { background:var(--paper-2); }
+  #pfContainer :global(.pagefind-ui__result-title) { display:block; margin:0; font-size:15px; font-weight:600; letter-spacing:-.01em; line-height:1.35; color:var(--ink); }
+  #pfContainer :global(.pagefind-ui__result-link) { position:static; font-size:inherit; color:inherit; text-decoration:none; outline:none; }
+  #pfContainer :global(.pagefind-ui__result-link:hover) { text-decoration:none; }
+  #pfContainer :global(.pagefind-ui__result-link::before) { content:none; }
+  #pfContainer :global(.pagefind-ui__result-link::after) { content:""; position:absolute; inset:0; border-radius:inherit; }
+  #pfContainer :global(.pagefind-ui__result-excerpt) { min-width:0; margin:3px 0 0; font-size:13.5px; font-weight:400; line-height:1.5; color:var(--ink-2);
+    display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+  #pfContainer :global(.pagefind-ui__result-nested) { position:relative; z-index:1; display:block; margin:6px 0 0; padding:7px 10px 7px 30px; border-radius:8px; transition:background-color .12s; }
+  #pfContainer :global(.pagefind-ui__result-nested:first-of-type) { padding-top:7px; }
+  #pfContainer :global(.pagefind-ui__result-nested::before) { content:"↳"; position:absolute; left:11px; top:7px; color:var(--faint); font-size:13px; }
+  #pfContainer :global(.pagefind-ui__result-nested:hover),
+  #pfContainer :global(.pagefind-ui__result-nested:has(a:focus-visible)) { background:var(--accent-soft); }
+  #pfContainer :global(.pagefind-ui__result-nested .pagefind-ui__result-title) { font-size:13.5px; font-weight:500; color:var(--ink-2); }
+  #pfContainer :global(.pagefind-ui__result-nested:hover .pagefind-ui__result-title) { color:var(--accent-ink); }
+  #pfContainer :global(.pagefind-ui__result-nested .pagefind-ui__result-excerpt) { font-size:13px; -webkit-line-clamp:1; }
+  #pfContainer :global(mark) { background:var(--accent-soft); color:var(--accent-ink); border-radius:3px; padding:0 2px; }
+  #pfContainer :global(.pagefind-ui__result-nested:hover mark) { background:#fff; }
+  #pfContainer :global(.pagefind-ui__result-tags), #pfContainer :global(.pagefind-ui__result-thumb) { display:none; }
+  #pfContainer :global(.pagefind-ui__button) { display:block; margin:8px auto 2px; width:auto; height:auto; padding:7px 14px; border-radius:999px;
+    border:1px solid var(--line); background:var(--paper); font:inherit; font-size:13px; font-weight:500; color:var(--ink-2); cursor:pointer; }
+  #pfContainer :global(.pagefind-ui__button:hover) { border-color:var(--line-2); color:var(--ink); }
+  .pf-container :global(.sd-empty) { padding:28px 16px; text-align:center; color:var(--muted); font-size:14px; }
+
+  /* ---- empty state ---- */
+  .sd-suggest { padding:6px 8px 10px; overflow-y:auto; }
+  .sd-suggest[hidden] { display:none; }
+  .sd-kicker { margin:0; padding:10px 10px 6px; font-family:var(--mono); font-size:11px; font-weight:500; letter-spacing:.07em; text-transform:uppercase; color:var(--faint); }
+  .sd-row { display:flex; align-items:center; gap:12px; padding:9px 10px; border-radius:10px; color:var(--ink); outline:none; transition:background-color .12s; }
+  .sd-row:hover, .sd-row:focus-visible { background:var(--paper-2); }
+  .sd-row-ic { flex:none; display:grid; place-items:center; width:30px; height:30px; border-radius:8px; background:var(--accent-soft); color:var(--accent-ink); }
+  .sd-row-t { flex:1; min-width:0; font-size:14.5px; font-weight:500; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .sd-row-m { flex:none; font-size:12.5px; color:var(--faint); }
+  @media (max-width:480px) { .sd-row-m { display:none; } }
+
+  /* ---- footer ---- */
+  .sd-foot { flex:none; display:flex; gap:18px; padding:10px 16px; border-top:1px solid var(--line); background:var(--paper-2); font-size:12px; color:var(--muted); }
+  .sd-foot span { display:flex; align-items:center; gap:5px; }
+  .sd-foot kbd { display:inline-grid; place-items:center; min-width:20px; height:20px; padding:0 4px; border-radius:5px; border:1px solid var(--line-2);
+    border-bottom-width:2px; background:var(--paper); font-family:var(--mono); font-size:10.5px; color:var(--ink-2); }
+  @media (max-width:767px) { .sd-foot { display:none; } }
+</style>
+
+<!-- Rendered at the end of <body>: every [data-search-open] trigger exists by the time this runs,
+     and the dialog sits outside the header nav, which is display:none on mobile. -->
+<script is:inline>
+  (() => {
+    const triggers = document.querySelectorAll('[data-search-open]');
+    const dialog = document.getElementById('searchDialog');
+    const closeBtn = document.getElementById('searchClose');
+    const container = document.getElementById('pfContainer');
+    const suggest = document.getElementById('searchSuggest');
+    const skelInput = container.querySelector('.pf-skel-input');
+
+    let mounting = null;
+    let indexWarm = null;
+
+    const currentInput = () => container.querySelector('input');
+    const syncSuggest = () => { suggest.hidden = !!currentInput()?.value.trim(); };
+
+    // Swap the stand-in for the real UI, carrying over anything already typed.
+    const mountUI = () => (mounting ??= (async () => {
+      try {
+        // Generated by `pagefind --site dist` after the build, so it 404s under `astro dev`.
+        await import(/* @vite-ignore */ '/pagefind/pagefind-ui.js');
+        const typed = skelInput.value;
+        const hadFocus = document.activeElement === skelInput;
+        container.innerHTML = '';
+        const ui = new window.PagefindUI({
+          element: '#pfContainer', showSubResults: true, showImages: false, resetStyles: false,
+          translations: {
+            placeholder: 'Search the guide…',
+            many_results: '[COUNT] results',
+            one_result: '1 result',
+            zero_results: 'No results for “[SEARCH_TERM]”',
+            searching: 'Searching…',
+            load_more: 'Show more results',
+          },
+        });
+        const input = currentInput();
+        if (typed) ui.triggerSearch(typed);
+        if (input && hadFocus) {
+          input.focus();
+          input.setSelectionRange(input.value.length, input.value.length);
+        }
+        return true;
+      } catch {
+        container.innerHTML = '<div class="sd-empty">Search runs on the built site. Use <code>npm run build && npm run preview</code> to try it locally.</div>';
+        return false;
+      }
+    })());
+
+    // Loads the search engine and index so the first keystroke doesn't wait on them.
+    const warmIndex = () => mountUI().then((ok) => {
+      if (ok) indexWarm ??= import(/* @vite-ignore */ '/pagefind/pagefind.js').then((pf) => pf.init()).catch(() => {});
+    });
+
+    const open = () => {
+      dialog.showModal();
+      document.querySelector('details.mmenu')?.removeAttribute('open');
+      currentInput()?.focus();
+      syncSuggest();
+      warmIndex();
+    };
+    const close = () => dialog.close();
+
+    container.addEventListener('input', syncSuggest);
+
+    // ↑/↓ move between the input and every visible link (suggestions or results); Enter follows the focused link natively.
+    dialog.addEventListener('keydown', (e) => {
+      if (e.key !== 'ArrowDown' && e.key !== 'ArrowUp') return;
+      const links = [...dialog.querySelectorAll('.pagefind-ui__result-link, .sd-suggest:not([hidden]) [data-nav]')];
+      if (!links.length) return;
+      e.preventDefault();
+      const i = links.indexOf(document.activeElement);
+      const next = e.key === 'ArrowDown' ? Math.min(i + 1, links.length - 1) : i - 1;
+      (next < 0 ? currentInput() : links[next])?.focus();
+      if (next >= 0) links[next].scrollIntoView({ block: 'nearest' });
+    });
+    // Enter in the input opens the top result.
+    container.addEventListener('keydown', (e) => {
+      if (e.key !== 'Enter' || e.target !== currentInput()) return;
+      const first = dialog.querySelector('.pagefind-ui__result-link');
+      if (first) { e.preventDefault(); first.click(); }
+    });
+
+    triggers.forEach((t) => {
+      t.addEventListener('click', open);
+      for (const ev of ['pointerenter', 'touchstart', 'focus']) t.addEventListener(ev, warmIndex, { once: true, passive: true });
+    });
+    closeBtn.addEventListener('click', close);
+    dialog.addEventListener('click', (e) => { if (e.target === dialog) close(); });
+    document.addEventListener('keydown', (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        dialog.open ? close() : open();
+      }
+    });
+
+    // Mobile triggers live in the closed hamburger menu, so hover never fires there — fetch the UI when idle instead.
+    if (!navigator.connection?.saveData) {
+      const idle = window.requestIdleCallback || ((fn) => setTimeout(fn, 1500));
+      idle(() => mountUI(), { timeout: 4000 });
+    }
+  })();
+</script>

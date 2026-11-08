@@ -1,7 +1,7 @@
 ---
 title: Scheduling and audience
-description: Sending later, choosing who receives it, and the ten-minute sweep you need to plan around.
-updated: 2026-08-05
+description: Sending later, choosing who receives it, and the once-a-minute scheduler that decides when "later" is.
+updated: 2026-11-07
 ---
 
 import Callout from '../../../components/Callout.astro';
@@ -12,14 +12,15 @@ import Callout from '../../../components/Callout.astro';
 better default for anything that is not urgent — you can write it when you have
 time and let it land when your shoppers are awake.
 
-<Callout type="warning" title="Scheduled sends land in a ten-minute window">
-Qpushly processes scheduled work on a sweep that runs every ten minutes. A campaign
-set for 09:00 goes out between 09:00 and 09:10.
+<Callout type="note" title="Scheduled sends land within a minute or two">
+Qpushly's scheduler ticks **once a minute**. A campaign set for 09:00 is picked up
+on the first tick at or after 09:00, and a large list then takes as long as it takes
+to push through — a few seconds for most stores.
 
 For a drop announcement or a sale, that is irrelevant. For anything where the
 notification has to arrive *before* a specific moment — a countdown, a livestream,
-a doors-open time — schedule it **fifteen minutes early** and let it be early
-rather than late.
+a doors-open time — schedule it **five minutes early** and let it be early rather
+than late.
 </Callout>
 
 ## Picking a time

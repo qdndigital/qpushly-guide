@@ -20,11 +20,22 @@ const fmt = updated ? new Intl.DateTimeFormat('en', { dateStyle: 'medium' }).for
 <Base title={`${title} · ${theme().brand} ${site.guideLabel}`} description={description}>
   <div class="shell">
     <Sidebar groups={groups} current={info.url} />
-    <article class="article">
+    <article class="article" data-pagefind-body>
       <button class="focus-btn" id="focusBtn" type="button" aria-label="Toggle focus mode">
         <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8V4h4M16 8V4h-4M4 12v4h4M16 12v4h-4"/></svg>
         <span id="focusLbl">Focus</span>
       </button>
+      <details class="mnav" data-pagefind-ignore>
+        <summary>Browse the guide</summary>
+        <div class="mnav-body">
+          {groups.map((g) => (
+            <div>
+              <div class="mnav-t">{g.label}</div>
+              {g.items.map((i) => <a href={i.url} aria-current={i.url === info.url ? 'page' : undefined}>{i.entry.data.title}</a>)}
+            </div>
+          ))}
+        </div>
+      </details>
       <div class="crumb">{info.sectionLabel}</div>
       <h1>{title}</h1>
       {description && <p class="lead">{description}</p>}

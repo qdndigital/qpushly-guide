@@ -1,7 +1,7 @@
 ---
 title: Create a campaign
 description: Every field in the campaign editor, what shoppers actually see, and how to write a notification that gets clicked.
-updated: 2026-08-05
+updated: 2026-11-07
 ---
 
 import Callout from '../../../components/Callout.astro';
@@ -27,12 +27,35 @@ here; a logo does not, because the small square icon already carries your brand.
 **Target audience** — who receives it. See
 [Scheduling and audience](/docs/campaigns/schedule-and-audience).
 
-**Campaign type** — *Flash* or *Regular*. Flash is for short-lived,
-time-boxed sends; regular is the default for everything else.
+**Campaign type** — *Regular* or *Flash sale*. Regular is the default. A Flash
+sale is a time-boxed send: give it an **end date**, and the notification is marked
+as needing attention on the shopper's device — it stays on screen until they act on
+it instead of fading with the rest. Use it for a real deadline, not for every send,
+or shoppers learn to swipe it away.
 
-**Publish time** — send now, or schedule it.
+**Publish time** — send now, or schedule it. See
+[Scheduling and audience](/docs/campaigns/schedule-and-audience).
 
-**End date** — optional, for time-limited campaigns.
+**End date** — for a Flash sale: the moment the offer stops being true. A send
+scheduled after its own end date is refused rather than sent stale.
+
+## A/B split test
+
+Switch on **A/B Split Test** and the editor asks for two versions — **Variant A**
+and **Variant B** — each with its own title, message, destination URL and image.
+Nothing is shared between them: an empty Variant B URL does not fall back to A's,
+so fill in both. The **traffic split** decides what share of subscribers gets each
+version; 50/50 is the default and the right choice unless you are protecting a
+control.
+
+Each subscriber receives exactly one variant, and the campaign's detail page
+reports impressions, clicks and revenue **per variant** as well as for the campaign
+as a whole. Revenue is credited to a variant only when the order can be traced to
+it — the link the shopper tapped, or the push we logged sending them — so an
+ordinary purchase in the same window can never be credited to A or B by accident.
+
+Test one thing at a time: the same offer with two titles tells you something; two
+different offers with different images tells you nothing you can reuse.
 
 ## What the shopper actually sees
 

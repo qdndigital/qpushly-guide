@@ -22,6 +22,12 @@ const total = infos.length;
     </div>
   </section>
 
+  <section class="wrap quick" aria-label="Get help">
+    <a class="qcard" href="/docs/help/troubleshooting"><b>Troubleshooting</b><span>No prompt, no subscribers, a notification that never arrived — what to check, in order.</span></a>
+    <a class="qcard" href="/docs/help/faq"><b>FAQ</b><span>Quick answers to the questions merchants ask most.</span></a>
+    <a class="qcard" href={`mailto:${site.supportEmail}`}><b>Contact support</b><span>Email the team — we reply within {site.responseTime}.</span></a>
+  </section>
+
   <section class="wrap lsections">
     {groups.map((g) => (
       <section class="lsec">
@@ -79,6 +85,12 @@ const total = infos.length;
   .cta.ghost { background:transparent; color:var(--ink-2); border:1px solid var(--line); box-shadow:none; font-family:'JetBrains Mono',monospace; font-size:12.5px; letter-spacing:.02em; }
   .cta.ghost:hover { color:var(--accent-ink); border-color:var(--accent-line); background:var(--accent-soft); transform:none; }
 
+  /* quick cards */
+  .quick { display:grid; gap:14px; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); padding:0 20px 40px; }
+  .qcard { display:flex; flex-direction:column; gap:6px; padding:18px 20px; border-radius:15px; border:1px solid var(--line); background:var(--paper-2); transition:all .18s var(--ease); }
+  .qcard:hover { border-color:var(--accent-line); background:var(--accent-soft); transform:translateY(-2px); }
+  .qcard b { font-size:15.5px; color:var(--ink); }
+  .qcard span { font-size:14px; color:var(--muted); line-height:1.45; }
   /* topic sections */
   .lsections { display:flex; flex-direction:column; gap:46px; padding:6px 20px 96px; }
   .lsec-h { display:flex; align-items:center; gap:14px; margin-bottom:18px; }

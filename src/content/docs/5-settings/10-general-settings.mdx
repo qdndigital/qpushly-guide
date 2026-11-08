@@ -1,7 +1,7 @@
 ---
 title: Settings
 description: Store name, contact email, notification defaults, branding, and the web-push key status card.
-updated: 2026-08-05
+updated: 2026-11-07
 ---
 
 import Callout from '../../../components/Callout.astro';
@@ -67,3 +67,28 @@ Shows your current plan and links to Shopify's plan page. See
 A reminder of the theme-embed step and its status. If you are on this page because
 something is not working, start at
 [Turn on the theme app embed](/docs/getting-started/theme-embed).
+
+## Troubleshooting — the attribution check
+
+Revenue tracking runs across three places — your theme, the shopper's browser and
+Shopify's order webhooks — and when a campaign reports no revenue, the question is
+which of the three stopped. **Attribution check** walks them in order and says, in
+one line each, what is working and where it stops:
+
+- the storefront script is reporting (and which version is running);
+- somebody has subscribed, and notifications are going out;
+- somebody has opened one;
+- order webhooks are arriving, and arrive carrying Qpushly's attributes;
+- orders are being credited — to a campaign or an automation, by checkout intent or
+  by the click fallback — and whether *Buy it now* is credited as well as *Add to
+  cart*.
+
+Each stop names the fix: usually the app embed is off on the live theme, or the
+theme extension was never deployed. Click one of your own notifications, buy a test
+product, and re-run the check to watch it go green end to end.
+
+## Privacy
+
+Links to **Data requests** — the page where a shopper's data request from Shopify
+lands with everything Qpushly holds about them, ready to pass on. See
+[Answering a data request](/docs/help/data-requests).

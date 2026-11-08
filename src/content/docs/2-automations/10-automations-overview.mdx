@@ -1,7 +1,7 @@
 ---
 title: How automations work
 description: The reminder model, delays, the three-reminder limit, and the stats on the automations list — shared by all five.
-updated: 2026-08-05
+updated: 2026-11-07
 ---
 
 import Callout from '../../../components/Callout.astro';
@@ -116,12 +116,13 @@ Automations page. See [Plan and billing](/docs/settings/plan-and-billing).
 
 ## Testing without waiting
 
-Automations run on a sweep every ten minutes, so nothing is instant. To test:
+Automations run on a scheduler that ticks every minute, so a reminder arrives
+within about a minute of its delay elapsing — never instantly. To test:
 
 1. Subscribe yourself from your own storefront.
 2. Trigger the event — subscribe for welcome, leave a cart for abandoned cart,
    edit a product's stock or price for the other two.
-3. Wait for the delay plus up to ten minutes.
+3. Wait for the delay plus a minute.
 
 If nothing arrives, work through
 [Troubleshooting](/docs/help/troubleshooting).

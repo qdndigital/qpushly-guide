@@ -1,7 +1,7 @@
 ---
 title: Quickstart
 description: From a fresh install to your first subscriber and your first send, in about ten minutes.
-updated: 2026-08-05
+updated: 2026-11-07
 ---
 
 import Callout from '../../../components/Callout.astro';
@@ -83,10 +83,10 @@ Do not write all three now. Get one working, see what it earns, then extend.
 
 You should get the notification within about a minute.
 
-<Callout type="warning" title="Scheduled sends are not instant to the second">
-Qpushly processes scheduled work on a sweep that runs every ten minutes, so a
-campaign scheduled for 09:00 goes out between 09:00 and 09:10. Fine for a drop
-announcement; do not build a countdown around it.
+<Callout type="note" title="Scheduled sends are not instant to the second">
+Qpushly's scheduler ticks once a minute, so a campaign scheduled for 09:00 goes out
+on the first tick at or after 09:00. Fine for a drop announcement; schedule a
+countdown a few minutes early rather than to the second.
 </Callout>
 
 ## 6 · Check the numbers · 1 min

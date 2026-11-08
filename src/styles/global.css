@@ -55,9 +55,9 @@
   @media (max-width:860px){ .shell{ grid-template-columns:minmax(0,1fr); } .sidebar{display:none} }
 
   /* ---- sidebar ---- */
-  .sidebar { @apply sticky self-start py-9 pr-2; top:var(--header); max-height:calc(100vh - var(--header)); overflow-y:auto; }
+  .sidebar { @apply sticky self-start py-9 pr-2 pl-2.5; top:var(--header); max-height:calc(100vh - var(--header)); overflow-y:auto; }
   .sidebar .grp { @apply mb-6; }
-  .sidebar .grp-t { @apply font-mono text-label uppercase text-muted mb-2.5; display:flex; align-items:center; gap:8px; }
+  .sidebar .grp-t { @apply font-mono text-label uppercase text-accent-ink font-semibold mb-2.5; display:flex; align-items:center; gap:8px; font-size:.75rem; letter-spacing:.09em; }
   .sidebar .grp-ic { display:inline-flex; color:var(--accent-ink); opacity:.9; }
   .sidebar a { @apply text-sm text-ink-2 rounded-lg px-2.5 py-1.5 -ml-2.5 transition; display:flex; align-items:center; gap:9px; }
   .sidebar a .ic { flex:none; display:inline-flex; color:var(--muted); transition:color .15s; }
@@ -77,7 +77,7 @@
 
   /* ---- article header ---- */
   .article { @apply py-9 min-w-0; }
-  .crumb { @apply font-mono text-label uppercase text-muted mb-4; }
+  .crumb { @apply font-mono text-label uppercase text-accent-ink font-semibold mb-4; font-size:.75rem; letter-spacing:.09em; }
   .article h1 { @apply text-h1 font-extrabold; }
   .article .lead { @apply text-lg text-ink-2 mt-3; }
   .meta { @apply flex items-center gap-2 mt-4 font-mono text-xs text-muted; }
@@ -225,7 +225,7 @@ a:focus-visible, button:focus-visible, .sidebar a:focus-visible { outline:2px so
 .edge { overflow: visible; }
 .edge .lbl { position: absolute; top: 50%; white-space: nowrap;
   font-family: ui-monospace, "JetBrains Mono", monospace; font-size: 10.5px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase;
-  color: #fff; background: var(--accent); padding: 5px 10px; border-radius: 8px;
+  color: #fff; background: var(--accent-ink); padding: 5px 10px; border-radius: 8px;
   box-shadow: 0 10px 22px -8px rgba(var(--accent-rgb),.6);
   opacity: 0; pointer-events: none; transition: opacity .2s ease, transform .22s cubic-bezier(.22,.61,.21,1); }
 .edge.l .lbl { left: calc(100% + 10px); transform: translate(-6px, -50%); }
@@ -301,3 +301,45 @@ a:focus-visible, button:focus-visible, .sidebar a:focus-visible { outline:2px so
 .prose pre { scrollbar-color: #3a3e45 transparent; }
 
 @media (prefers-reduced-motion: reduce) { ::-webkit-scrollbar-thumb { transition: none; } }
+
+/* ============================================================================
+   Site chrome — skip link, header nav state, mobile menus, site footer
+   (ported from qthe-docs, 2026-11)
+   ============================================================================ */
+.skip { position:absolute; left:12px; top:-60px; z-index:100; background:var(--ink); color:#fff; padding:8px 14px; border-radius:8px; font-size:14px; font-weight:600; transition:top .15s; }
+.skip:focus { top:10px; }
+.hlinks a.on { color:var(--ink); text-decoration:underline; text-decoration-color:var(--accent); text-decoration-thickness:2px; text-underline-offset:8px; }
+
+/* header menu on phones */
+.mmenu { margin-left:auto; position:relative; }
+.mmenu > summary { list-style:none; display:grid; place-items:center; width:40px; height:40px; border-radius:10px; cursor:pointer; color:var(--ink); }
+.mmenu > summary::-webkit-details-marker { display:none; }
+.mmenu[open] > summary { background:var(--paper-2); }
+.mmenu-panel { position:absolute; right:0; top:calc(100% + 8px); min-width:220px; display:flex; flex-direction:column; padding:8px;
+  background:#fff; border:1px solid var(--line); border-radius:14px; box-shadow:var(--shadow-float); }
+.mmenu-panel a { padding:10px 12px; border-radius:9px; font-size:15px; font-weight:500; color:var(--ink-2); }
+.mmenu-panel a:hover, .mmenu-panel a[aria-current] { background:var(--accent-soft); color:var(--accent-ink); }
+.mmenu-search { display:flex; align-items:center; gap:9px; padding:10px 12px; margin-bottom:4px; border-radius:9px; border:1px solid var(--line);
+  font-size:15px; font-weight:500; color:var(--ink-2); background:var(--paper-2); text-align:left; }
+.mmenu-search:hover { color:var(--ink); border-color:var(--line-2); }
+@media (min-width:768px){ .mmenu { display:none; } }
+
+/* guide navigation on phones (the sidebar is hidden below 860px) */
+.mnav { display:none; margin:20px 0 4px; border:1px solid var(--line); border-radius:12px; background:var(--paper-2); }
+.mnav > summary { list-style:none; cursor:pointer; padding:12px 14px; font-weight:600; font-size:14px; display:flex; justify-content:space-between; align-items:center; gap:10px; }
+.mnav > summary::-webkit-details-marker { display:none; }
+.mnav > summary::after { content:"+"; font-family:var(--mono); color:var(--muted); }
+.mnav[open] > summary::after { content:"−"; }
+.mnav-body { padding:4px 14px 14px; display:flex; flex-direction:column; gap:14px; }
+.mnav-t { font-family:var(--mono); font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); margin-bottom:4px; }
+.mnav-body a { display:block; padding:6px 0; font-size:14.5px; color:var(--ink-2); }
+.mnav-body a[aria-current] { color:var(--accent-ink); font-weight:600; }
+@media (max-width:860px){ .mnav { display:block; } }
+
+/* site footer */
+.sfoot { border-top:1px solid var(--line); background:var(--paper-2); margin-top:40px; }
+.sfoot-in { display:flex; flex-wrap:wrap; align-items:center; gap:14px 28px; padding-block:28px; }
+.sfoot-brand { display:flex; align-items:center; gap:10px; font-weight:600; font-size:14px; }
+.sfoot-links { display:flex; flex-wrap:wrap; gap:8px 20px; font-size:14px; color:var(--ink-2); }
+.sfoot-links a:hover { color:var(--ink); text-decoration:underline; }
+.sfoot-fine { width:100%; margin:0; font-size:12.5px; color:var(--muted); }

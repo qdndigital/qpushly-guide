@@ -158,16 +158,13 @@ inherited behaviour, unchanged here so both guides look the same. If you decide 
 is the wrong default for a docs site, the logic is the `ugs_doc_focus` block in
 `src/layouts/DocLayout.astro` — change it in **both** repos.
 
-## Optional: search
+## Search
 
-[Pagefind](https://pagefind.app) gives zero-infra static search:
-
-```bash
-npm i -D pagefind
-# package.json → "postbuild": "pagefind --site dist"
-```
-
-Worth adding once the guide passes ~25 articles.
+Built in: [Pagefind](https://pagefind.app) indexes `dist/` after `astro build`
+(`npm run build` runs both). The dialog (`src/components/SearchDialog.astro`,
+⌘K) 404s under `astro dev` by design — try it with `npm run build && npm run preview`.
+Articles are indexed from `<article data-pagefind-body>`; mark anything to skip
+with `data-pagefind-ignore`.
 
 ## Deploy
 

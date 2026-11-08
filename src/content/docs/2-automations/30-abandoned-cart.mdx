@@ -1,7 +1,7 @@
 ---
 title: Abandoned cart recovery
 description: How Qpushly knows a cart was abandoned, how the sequence works, and how recovery stops it.
-updated: 2026-08-05
+updated: 2026-11-07
 ---
 
 import Callout from '../../../components/Callout.astro';
@@ -41,11 +41,15 @@ A starting point that works for most stores:
 
 ## Recovery stops the rest
 
-When the cart is recovered, the sequence stops — remaining reminders are not sent.
-The cart is marked recovered and linked to the order, which is what puts it in the
-Revenue column.
+When the shopper buys, the sequence stops — remaining reminders are not sent. The
+order webhook matches the cart (by Shopify's cart token, or failing that any cart of
+that subscriber from the last 7 days), marks it **recovered**, links it to the
+order, and deletes every still-scheduled reminder for it. That link is what puts the
+order in the Revenue column.
 
-So a shopper who buys after reminder 1 never receives 2 and 3. You do not need to
+So a shopper who buys after reminder 1 never receives 2 and 3 — and a shopper who
+buys without tapping anything, straight from your site, never receives reminder 1
+either, as long as the order lands before the delay runs out. You do not need to
 build that logic yourself.
 
 ## What to write
@@ -75,8 +79,11 @@ losing the sale.
 
 - **Ten minutes is fixed.** The abandonment threshold is not configurable; your
   control is the reminder delay on top of it.
-- **The sweep runs every ten minutes.** A 30-minute reminder arrives somewhere
-  between 30 and 40 minutes.
+- **The scheduler ticks every minute.** A 30-minute reminder arrives somewhere
+  between 30 and 31 minutes after the cart went quiet.
+- **Only subscribers' carts are tracked.** The storefront script sends nothing
+  about a cart until the browser has subscribed, so there is no record of a
+  non-subscriber's cart anywhere — not a privacy promise, a mechanical one.
 - **A cart that changes resets the clock.** Adding another item counts as activity.
 - **One sequence per cart**, not per item.
 
