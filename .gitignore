@@ -3,9 +3,8 @@ dist/
 .astro/
 .DS_Store
 *.log
-.env
-.env.*
 !.env.example
 
 # Local editor/tool config — not project content.
 .claude/
+config.bat

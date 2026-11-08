@@ -1,6 +1,6 @@
 ---
 import '../styles/global.css';
-import { theme, logo, site } from '../config';
+import { theme, logo, wordmark, site } from '../config';
 import { loadDocs } from '../lib/docs';
 import Search from '../components/Search.astro';
 import SearchDialog from '../components/SearchDialog.astro';
@@ -34,7 +34,9 @@ const year = new Date().getFullYear();
     <meta property="og:description" content={pageDescription} />
     <meta property="og:url" content={canonical} />
     <meta name="twitter:card" content="summary" />
-    <link rel="icon" href="/favicon.svg?v=3" type="image/svg+xml" />
+    <link rel="icon" href="/favicon.svg?v=4" type="image/svg+xml" />
+    <link rel="icon" href="/favicon.ico?v=4" sizes="any" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <meta name="theme-color" content="#ffffff" />
   </head>
   <body>
@@ -42,8 +44,10 @@ const year = new Date().getFullYear();
     <header class="site">
       <div class="wrap bar">
         <a href="/" class="brand" aria-label={`${t.brand} ${site.guideLabel} home`}>
-          <Fragment set:html={logo(28)} />
-          <span>{t.brand}</span><span class="tag">{site.guideLabel}</span>
+          {wordmark(30)
+            ? <Fragment set:html={wordmark(30)} />
+            : <><Fragment set:html={logo(28)} /><span>{t.brand}</span></>}
+          <span class="tag">{site.guideLabel}</span>
         </a>
         <nav class="hlinks" aria-label="Main">
           <Search />
@@ -69,8 +73,10 @@ const year = new Date().getFullYear();
     <footer class="sfoot">
       <div class="wrap sfoot-in">
         <div class="sfoot-brand">
-          <Fragment set:html={logo(22)} />
-          <span>{t.brand} — web push for Shopify, by QDN</span>
+          {wordmark(24)
+            ? <Fragment set:html={wordmark(24)} />
+            : <><Fragment set:html={logo(22)} /><span>{t.brand}</span></>}
+          <span class="sfoot-tagline">— web push for Shopify, by QDN</span>
         </div>
         <nav class="sfoot-links" aria-label="Footer">
           <a href={docsHome}>{site.guideLabel}</a>

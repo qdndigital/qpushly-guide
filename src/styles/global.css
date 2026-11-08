@@ -40,6 +40,7 @@
   header.site .bar { @apply flex items-center gap-4 h-full; }
   .brand { @apply flex items-center gap-2.5 font-bold text-[15px] text-ink tracking-tight2; }
   .brand .mk { @apply w-7 h-7 shrink-0; }
+  .brand .lockup, .sfoot-brand .lockup { display:block; width:auto; flex-shrink:0; }
   .brand .tag { @apply font-mono text-label uppercase text-muted border border-line-2 rounded-md px-1.5 py-1 ml-1; }
   .hlinks { @apply hidden md:flex items-center gap-6 ml-auto text-sm font-medium text-ink-2; }
   .hlinks a:hover { @apply text-ink; }
